@@ -1,4 +1,6 @@
 import random
+
+import pygame
 from dungeonmax.mobs.character import Character
 
 class Player(Character):
@@ -67,3 +69,8 @@ class Player(Character):
             'ranged_defense': self.ranged_defense,
             'special_defense': self.special_defense,
         }
+    
+    def get_mouse_side(self):
+        if pygame.mouse.get_pos()[0] >= self.rect.centerx:
+            return 'right'
+        return 'left'

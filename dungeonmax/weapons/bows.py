@@ -6,7 +6,8 @@ from dungeonmax.particles.arrows import WoodenArrow
 from dungeonmax.weapons.weapon import Weapon
 
 class Bow(Weapon):
-    def __init__(self, image, name, ui_graphic, attack_speed, arrow_speed, damage, projectile_class):
+    def __init__(self, image, name, ui_graphic, attack_speed, 
+                 arrow_speed, damage, projectile_class, damage_range):
         super().__init__(image, name, ui_graphic, attack_speed)
         self.weapon_type = 'Bow'
         self.projectile_class = projectile_class
@@ -14,6 +15,7 @@ class Bow(Weapon):
         self.attack_speed = attack_speed
         self.projectile_speed = arrow_speed
         self.damage = damage
+        self.damage_range = damage_range
 
     def update(self, player):
         shot_cooldown = 1000 / self.attack_speed
@@ -28,7 +30,9 @@ class Bow(Weapon):
 
         arrow = None
         if pygame.mouse.get_pressed()[0] and not self.fired and pygame.time.get_ticks() - self.last_used >= shot_cooldown:
-            arrow = self.projectile_class(self.rect.centerx, self.rect.centery, self.angle, self.projectile_speed, self.damage, self.on_hit)
+            arrow = self.projectile_class(self.rect.centerx, self.rect.centery, self.angle, 
+                                          self.projectile_speed, self.damage, self.on_hit,
+                                          range_=self.damage_range)
             self.fired = True
             self.last_used = pygame.time.get_ticks()
         if not pygame.mouse.get_pressed()[0]:
@@ -52,9 +56,10 @@ class RecruitsBow(Bow):
     DAMAGE = 5
     ATTACK_SPEED = 3
     ARROW_SPEED = 10
+    DAMAGE_RANGE = 15
 
     def __init__(self):
-        super().__init__(self.GRAPHIC, self.CODENAME, self.UI_GRAPHIC, self.ATTACK_SPEED, self.ARROW_SPEED, self.DAMAGE, WoodenArrow)
+        super().__init__(self.GRAPHIC, self.CODENAME, self.UI_GRAPHIC, self.ATTACK_SPEED, self.ARROW_SPEED, self.DAMAGE, WoodenArrow, self.DAMAGE_RANGE)
 
     def on_hit(self, player, enemy):
         pass

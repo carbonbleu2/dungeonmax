@@ -6,7 +6,7 @@ from dungeonmax.settings import *
 
 
 class ProjectileParticle(pygame.sprite.Sprite):
-    def __init__(self, image, x, y, angle, proj_speed, damage, on_hit, is_magic=False):
+    def __init__(self, image, x, y, angle, proj_speed, damage, on_hit, is_magic=False, range_=15):
         pygame.sprite.Sprite.__init__(self)
         
         self.original_image = pygame.image.load(image).convert_alpha()
@@ -22,6 +22,9 @@ class ProjectileParticle(pygame.sprite.Sprite):
 
         self.dx = self.speed * math.cos(math.radians(self.angle))
         self.dy = -(self.speed * math.sin(math.radians(self.angle)))
+
+        self.range = range_ * TILE_SIZE
+        self.start_point = x, y
         
     def update(self, enemies, player):
         damage = 0
@@ -32,6 +35,9 @@ class ProjectileParticle(pygame.sprite.Sprite):
 
         if self.rect.right < 0 or self.rect.left > SCREEN_WIDTH \
             or self.rect.bottom < 0 or self.rect.top > SCREEN_HEIGHT:
+            self.kill()
+
+        if pygame.math.Vector2(self.rect.center).distance_to(self.start_point) >= self.range:
             self.kill()
 
         for enemy in enemies:

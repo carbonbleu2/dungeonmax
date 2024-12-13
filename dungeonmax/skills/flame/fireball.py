@@ -14,6 +14,7 @@ class Fireball(Skill):
     COST = 5
     NAME = "Fireball"
     PROJECTILE_SPEED = 5
+    PROJECTILE_RANGE = 15
     DESCRIPTION = "Launch a fireball at the direction of your mouse cursor"
 
     def __init__(self):
@@ -34,7 +35,9 @@ class Fireball(Skill):
             y_dist = -(mouse_pos[1] - current_y)
             angle = math.degrees(math.atan2(y_dist, x_dist))
 
-            fireball = FireballProjectile(current_x, current_y, angle, self.PROJECTILE_SPEED, self.DAMAGE + player.special_attack, self.on_hit)
+            fireball = FireballProjectile(current_x, current_y, angle, self.PROJECTILE_SPEED, 
+                                          self.DAMAGE + player.special_attack, self.on_hit,
+                                          range_=self.PROJECTILE_RANGE)
             self.last_used = pygame.time.get_ticks()
             self.can_be_used = False
         

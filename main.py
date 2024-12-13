@@ -14,6 +14,8 @@ from dungeonmax.settings import *
 from dungeonmax.mobs.character import Character
 from dungeonmax.skills.flame.fireball import Fireball
 from dungeonmax.skills.warrior.warriors_resolve import WarriorsResolve
+from dungeonmax.tiles.stage import Stage
+from dungeonmax.tiles.tile_loader import TileLoader
 from dungeonmax.ui.damage_text import DamageText
 from dungeonmax.ui.ui import UI
 from dungeonmax.weapons.bows import RecruitsBow
@@ -34,7 +36,26 @@ def main():
 
     clock = pygame.time.Clock()
 
-    animation_repository = AnimationRepository()
+    _ = AnimationRepository()
+    _ = TileLoader()
+
+    map1 = [
+        [1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, -1, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1]
+    ]
+
+    stage1 = Stage()
+    stage1.process_tiles(map1)
 
     player = Player(300, 400, AnimationRepository.MOB_ANIMS)
     
@@ -113,13 +134,13 @@ def main():
                 )
         damage_text_group.update()
 
+        stage1.draw(screen)
+
         for enemy in enemies:
             if enemy.alive:
                 enemy.draw(screen)
         player.draw(screen)
         current_weapon.draw(screen)
-
-        print(player.melee_defense)
 
         for arrow in particles_group:
             arrow.draw(screen)

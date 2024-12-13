@@ -6,8 +6,8 @@ from dungeonmax.weapons.swing import ArcSwing
 from dungeonmax.weapons.weapon import Weapon
 
 class Sword(Weapon):
-    def __init__(self, image, name, ui_graphic, attack_speed, swing_speed, damage):
-        super().__init__(image, name, ui_graphic, attack_speed)
+    def __init__(self, image, name, codename, ui_graphic, attack_speed, swing_speed, damage):
+        super().__init__(image, name, codename, ui_graphic, attack_speed)
         self.weapon_type = 'Sword'
         self.used = False
         self.attack_speed = attack_speed
@@ -69,5 +69,5 @@ class RecruitsSword(Sword):
     SCALE_FACTOR = 1.2
 
     def __init__(self):
-        super().__init__(self.GRAPHIC, self.CODENAME, self.UI_GRAPHIC, self.ATTACK_SPEED, self.SWING_SPEED, self.DAMAGE)
+        super().__init__(self.GRAPHIC, self.NAME, self.CODENAME, self.UI_GRAPHIC, self.ATTACK_SPEED, self.SWING_SPEED, self.DAMAGE)
         self.image = pygame.transform.scale_by(self.image, self.SCALE_FACTOR)

@@ -21,6 +21,10 @@ class AnimationRepository:
             "idle": [],
             "run": []
         },
+        "Chomper": {
+            "idle": [],
+            "run": []
+        },
         "Player": {
             "idle": [],
             "run": []

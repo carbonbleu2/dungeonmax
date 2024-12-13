@@ -6,9 +6,9 @@ from dungeonmax.particles.arrows import WoodenArrow
 from dungeonmax.weapons.weapon import Weapon
 
 class Bow(Weapon):
-    def __init__(self, image, name, ui_graphic, attack_speed, 
+    def __init__(self, image, name, codename, ui_graphic, attack_speed, 
                  arrow_speed, damage, projectile_class, damage_range):
-        super().__init__(image, name, ui_graphic, attack_speed)
+        super().__init__(image, name, codename, ui_graphic, attack_speed)
         self.weapon_type = 'Bow'
         self.projectile_class = projectile_class
         self.fired = False
@@ -56,10 +56,10 @@ class RecruitsBow(Bow):
     DAMAGE = 5
     ATTACK_SPEED = 3
     ARROW_SPEED = 10
-    DAMAGE_RANGE = 15
+    DAMAGE_RANGE = 10
 
     def __init__(self):
-        super().__init__(self.GRAPHIC, self.CODENAME, self.UI_GRAPHIC, self.ATTACK_SPEED, self.ARROW_SPEED, self.DAMAGE, WoodenArrow, self.DAMAGE_RANGE)
+        super().__init__(self.GRAPHIC, self.NAME, self.CODENAME, self.UI_GRAPHIC, self.ATTACK_SPEED, self.ARROW_SPEED, self.DAMAGE, WoodenArrow, self.DAMAGE_RANGE)
 
     def on_hit(self, player, enemy):
         pass

@@ -8,10 +8,10 @@ TITLE = "DungeonMax"
 
 TILE_SIZE = 32
 
-SCREEN_WIDTH = 1900
-SCREEN_HEIGHT = 1000
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
 
-BG_COLOUR = 'grey'
+BG_COLOUR = 'black'
 
 FPS = 60
 
@@ -25,7 +25,7 @@ UI_FONT = os.path.join('fonts', 'small_pixel.ttf')
 UI_FONT_SIZE = 15
 UI_FONT_COLOUR = 'black'
 
-UI_INFO_PANEL_COLOUR = '#505050'
+UI_INFO_PANEL_COLOUR = '#3d2328'
 
 HEALTH_BAR_COLOUR = 'red'
 ENERGY_BAR_COLOUR = 'blue'
@@ -36,3 +36,5 @@ BAR_HEIGHT = 20
 BAR_FG_COLOUR = 'white'
 
 UI_BORDER_COLOUR = 'black'
+
+SCROLL_THRESHOLD = 200

@@ -39,26 +39,10 @@ def main():
     _ = AnimationRepository()
     _ = TileLoader()
 
-    map1 = [
-        [1, 1, 1, 1, 1],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [1, 0, -1, 0, 1],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [1, 0, 0, 0, 1],
-        [1, 1, 1, 1, 1]
-    ]
+    stage_num = 1
+    stage = Stage()
+    stage.read_from_file(f"{stage_num}.csv")
 
-    stage1 = Stage()
-    stage1.process_tiles(map1)
-
-    player = Player(300, 400, AnimationRepository.MOB_ANIMS)
-    
     equipment_manager = EquipmentManager([], [])
     equipment_manager.add_weapon(RecruitsSword())
     equipment_manager.add_weapon(RecruitsBow())
@@ -66,20 +50,16 @@ def main():
     equipment_manager.add_skill(Fireball())
     equipment_manager.add_skill(WarriorsResolve())
 
-    enemies = []
-
-    enemy = Blobble(200, 300, AnimationRepository.MOB_ANIMS)
-    enemies.append(enemy)
-
     # weapon = RecruitsBow()
     particles_group = pygame.sprite.Group()
     damage_text_group = pygame.sprite.Group()
     item_group = pygame.sprite.Group()
 
-    potion1 = HealthPotion(400, 600, AnimationRepository.ITEM_ANIMS)
-    item_group.add(potion1)
-    coin1 = Coin(200, 200, AnimationRepository.ITEM_ANIMS)
-    item_group.add(coin1)
+    for item in stage.item_list:
+        item_group.add(item)
+
+    screen_scroll_x = 0
+    screen_scroll_y = 0
 
     run = True
 
@@ -104,6 +84,8 @@ def main():
 
         screen.fill(BG_COLOUR)
 
+        player = stage.player
+
         dx, dy = 0, 0
         if moving_up:
             dy = -player.speed
@@ -114,27 +96,31 @@ def main():
         elif moving_right:
             dx = player.speed
 
-        player.move(dx, dy)
-        
-        item_group.update(player)
+        screen_scroll_x, screen_scroll_y = player.move(dx, dy, stage.obstacle_tiles)
+
+        stage.update(screen_scroll_x, screen_scroll_y)
+        item_group.update(player, screen_scroll_x, screen_scroll_y)
+
+        enemies = stage.npc_list
 
         for enemy in enemies:
-            enemy.update()
-        player.update()
+            enemy.ai(player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
+            enemy.update(player)
+        player.update(None)
 
         particle = current_weapon.update(player)
         
         if particle:
             particles_group.add(particle)  
         for particle in particles_group:
-            damage, damage_pos = particle.update(enemies, player)
+            damage, damage_pos = particle.update(enemies, player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
             if damage > 0:
                 damage_text_group.add(
                     DamageText(damage_pos.centerx, damage_pos.y, damage, DAMAGE_TEXT_COLOUR)
                 )
-        damage_text_group.update()
+        damage_text_group.update(screen_scroll_x, screen_scroll_y)
 
-        stage1.draw(screen)
+        stage.draw(screen)
 
         for enemy in enemies:
             if enemy.alive:
@@ -148,10 +134,12 @@ def main():
         item_group.draw(screen)
         damage_text_group.draw(screen)
 
-        ui.draw_info(player)
-        ui.draw_current_weapon(current_weapon)
-        ui.draw_current_skill(current_skill)
-        ui.draw_buffs(player)
+        ui.draw_info(player, stage_num)
+        weapon_rect = ui.draw_current_weapon(current_weapon)
+        skill_rect = ui.draw_current_skill(current_skill)
+        
+        ui.draw_weapon_tooltip(weapon_rect, current_weapon)
+        ui.draw_skill_tooltip(skill_rect, current_skill)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

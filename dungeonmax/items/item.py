@@ -11,7 +11,10 @@ class Item(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
-    def update(self, player, *args, **kwargs):
+    def update(self, player, screen_scroll_x, screen_scroll_y, **kwargs):
+        self.rect.x += screen_scroll_x
+        self.rect.y += screen_scroll_y
+
         animation_cooldown = 100
         self.image = self.animations[self.name][self.frame_index]
 

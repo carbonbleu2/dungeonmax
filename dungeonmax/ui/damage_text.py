@@ -11,7 +11,10 @@ class DamageText(pygame.sprite.Sprite):
         self.rect.center = (x, y)
         self.counter = 0
 
-    def update(self, *args, **kwargs):
+    def update(self, scroll_x, scroll_y, **kwargs):
+        self.rect.x += scroll_x
+        self.rect.y += scroll_y
+        
         self.rect.y -= 1
         self.counter += 1
         if self.counter >= 30:

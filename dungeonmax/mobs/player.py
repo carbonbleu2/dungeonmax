@@ -5,7 +5,10 @@ from dungeonmax.mobs.character import Character
 
 class Player(Character):
     def __init__(self, x, y, animations):
-        super().__init__(x, y, animations, 'Player')
+        super().__init__(x, y, animations, 'Player', char_type='player')
+
+        self.rect = self.rect.inflate(-10, 0)
+        self.rect.center = x, y
 
         # Attributes
         self.strength = 10
@@ -18,6 +21,8 @@ class Player(Character):
         # Current stats
         self.health = self.max_hp
         self.energy = self.max_ep
+
+        self.invincibility_cooldown = 300
 
     def calibrate_stats(self):
         self.max_hp = int(self.strength * 10)
@@ -34,24 +39,23 @@ class Player(Character):
     def collect(self, item):
         if item.name == 'Coin':
             self.coins += 1
-            self.gain_xp(10)
+            self.gain_xp(5)
         elif item.name == 'HealthPotion':
             self.health = min(self.max_hp, self.health + 10)
         else:
             print(f"Item collected: {item.name}")
 
     def gain_xp(self, exp_gain):
-        old_xp_for_level_gain = self.xp_to_next_level
         self.total_xp += exp_gain
         self.xp_to_next_level = self.xp_to_next_level - exp_gain
         while self.xp_to_next_level <= 0:
             self.level_up()
-            self.xp_to_next_level = old_xp_for_level_gain + 15 + self.xp_to_next_level
+            self.xp_to_next_level = self.level * 10 + self.xp_to_next_level
 
     def level_up(self):
         self.level += 1
         self.strength += random.randint(1, 2)
-        self.dexterity += random.randint(1, 2)
+        self.dexterity += 0.2
         self.intelligence += random.randint(1, 2)
         self.calibrate_stats()
 

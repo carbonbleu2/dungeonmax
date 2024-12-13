@@ -21,7 +21,10 @@ class ArcSwing(pygame.sprite.Sprite):
         self.radius = 30     
         self.on_hit = on_hit
         
-    def update(self, enemies, player):
+    def update(self, enemies, player, obstacles, scroll_x, scroll_y):
+        self.rect.x += scroll_x
+        self.rect.y += scroll_y
+
         damage = 0
         damage_pos = None
 
@@ -50,6 +53,8 @@ class ArcSwing(pygame.sprite.Sprite):
                 damage = max(1, self.damage + random.randint(-1, 1) - enemy.melee_defense)
                 damage_pos = enemy.rect
                 enemy.health -= damage
+                if enemy.health <= 0:
+                    enemy.on_death(player)
                 enemy.activate_invincibility()
 
         return damage, damage_pos

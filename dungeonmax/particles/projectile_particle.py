@@ -26,16 +26,20 @@ class ProjectileParticle(pygame.sprite.Sprite):
         self.range = range_ * TILE_SIZE
         self.start_point = x, y
         
-    def update(self, enemies, player):
+    def update(self, enemies, player, obstacles, scroll_x, scroll_y):
         damage = 0
         damage_pos = None
 
-        self.rect.x += self.dx
-        self.rect.y += self.dy
+        self.rect.x += self.dx + scroll_x
+        self.rect.y += self.dy + scroll_y
 
         if self.rect.right < 0 or self.rect.left > SCREEN_WIDTH \
             or self.rect.bottom < 0 or self.rect.top > SCREEN_HEIGHT:
             self.kill()
+
+        for obstacle in obstacles:
+            if obstacle[1].colliderect(self.rect):
+                self.kill()
 
         if pygame.math.Vector2(self.rect.center).distance_to(self.start_point) >= self.range:
             self.kill()
@@ -47,6 +51,8 @@ class ProjectileParticle(pygame.sprite.Sprite):
                 damage = max(1, (self.damage + random.randint(-1, 1) - damage_reduction))
                 damage_pos = enemy.rect
                 enemy.health -= damage
+                if enemy.health <= 0:
+                    enemy.on_death(player)
                 self.kill()
 
         return damage, damage_pos

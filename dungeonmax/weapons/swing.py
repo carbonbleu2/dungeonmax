@@ -47,7 +47,7 @@ class ArcSwing(pygame.sprite.Sprite):
         for enemy in enemies:
             if enemy.rect.colliderect(self.rect) and enemy.alive and not enemy.invincible:
                 self.on_hit(player, enemy)
-                damage = (self.damage + random.randint(-3, 3) - enemy.ranged_defense)
+                damage = max(1, self.damage + random.randint(-1, 1) - enemy.melee_defense)
                 damage_pos = enemy.rect
                 enemy.health -= damage
                 enemy.activate_invincibility()

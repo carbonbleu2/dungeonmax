@@ -6,7 +6,7 @@ class Blobble(Character):
         
         # self.rect = self.rect.inflate(0, -10)
 
-        self.max_hp = 50
+        self.max_hp = 20
         self.max_ep = 0
         self.melee_attack = 5
         self.ranged_attack = 0

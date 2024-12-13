@@ -30,7 +30,7 @@ class Character:
 
         self.invincible = False
         self.invincibility_timer = 0
-        self.invincibility_cooldown = 500
+        self.invincibility_cooldown = 800
 
         self.buffs = {}
 

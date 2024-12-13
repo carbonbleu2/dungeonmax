@@ -7,7 +7,7 @@ class Player(Character):
 
         # Attributes
         self.strength = 10
-        self.intelligence = 8
+        self.intelligence = 5
         self.dexterity = 5
 
         # Calibrate stats based on attributes
@@ -20,7 +20,7 @@ class Player(Character):
     def calibrate_stats(self):
         self.max_hp = int(self.strength * 10)
         self.max_ep = int(self.intelligence * 8)
-        self.melee_attack = int(self.strength * 0.80)
+        self.melee_attack = int(self.strength * 0.60)
         self.ranged_attack = int(self.dexterity * 0.80)
         self.special_attack = int(self.intelligence * 0.80)
         self.melee_defense = int(self.strength * 0.50)

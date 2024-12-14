@@ -1,17 +1,10 @@
-import os
-import pprint
 import re
 import pygame
 
 from dungeonmax.animation_repository import AnimationRepository
-from dungeonmax.colour import NamedColour
 from dungeonmax.equipment_manager import EquipmentManager
-from dungeonmax.items.coin import Coin
-from dungeonmax.items.potions import HealthPotion
-from dungeonmax.mobs.enemies.blobble import Blobble
-from dungeonmax.mobs.player import Player
+from dungeonmax.screenfade import FadeType, ScreenFade
 from dungeonmax.settings import *
-from dungeonmax.mobs.character import Character
 from dungeonmax.skills.flame.fireball import Fireball
 from dungeonmax.skills.warrior.warriors_resolve import WarriorsResolve
 from dungeonmax.tiles.stage import Stage
@@ -20,6 +13,7 @@ from dungeonmax.ui.damage_text import DamageText
 from dungeonmax.ui.ui import UI
 from dungeonmax.weapons.bows import RecruitsBow
 from dungeonmax.weapons.swords import RecruitsSword
+from dungeonmax.button import Button
 
 def atoi(text):
     return int(text) if text.isdigit() else text
@@ -36,12 +30,16 @@ def main():
 
     clock = pygame.time.Clock()
 
+    restart_button_image = os.path.join("graphics", "buttons", "restart.png")
+
     _ = AnimationRepository()
     _ = TileLoader()
 
     stage_num = 1
     stage = Stage()
     stage.read_from_file(f"{stage_num}.csv")
+
+    start_intro = True
 
     equipment_manager = EquipmentManager([], [])
     equipment_manager.add_weapon(RecruitsSword())
@@ -55,6 +53,15 @@ def main():
     damage_text_group = pygame.sprite.Group()
     item_group = pygame.sprite.Group()
     enemy_projeciles_group = pygame.sprite.Group()
+
+    def reset_level():
+        particles_group.empty()
+        damage_text_group.empty()
+        item_group.empty()
+        enemy_projeciles_group.empty()
+
+        stage = Stage()
+        return stage
 
     for item in stage.item_list:
         item_group.add(item)
@@ -73,6 +80,11 @@ def main():
 
     ui_show_stats = False
 
+    intro_fade = ScreenFade(FadeType.WHOLE_SCREEN, NamedColour.BLACK.value, 10)
+    gameover_fade = ScreenFade(FadeType.CURTAIN_FALL, NamedColour.RED.value, 10)
+
+    restart_button = Button(SCREEN_WIDTH // 2 - 74, SCREEN_HEIGHT // 2 - 74, restart_button_image)
+
     while run:
         current_weapon = equipment_manager.get_weapon()
         current_skill = equipment_manager.get_skill()
@@ -87,47 +99,49 @@ def main():
 
         player = stage.player
 
-        dx, dy = 0, 0
-        if moving_up:
-            dy = -player.speed
-        elif moving_down:
-            dy = player.speed
-        if moving_left:
-            dx = -player.speed
-        elif moving_right:
-            dx = player.speed
+        if player.alive:
 
-        screen_scroll_x, screen_scroll_y = player.move(dx, dy, stage.obstacle_tiles)
+            dx, dy = 0, 0
+            if moving_up:
+                dy = -player.speed
+            elif moving_down:
+                dy = player.speed
+            if moving_left:
+                dx = -player.speed
+            elif moving_right:
+                dx = player.speed
 
-        stage.update(screen_scroll_x, screen_scroll_y)
-        item_group.update(player, screen_scroll_x, screen_scroll_y)
+            screen_scroll_x, screen_scroll_y, level_complete = player.move(dx, dy, stage.obstacle_tiles, stage.portal_tile)
 
-        enemies = stage.npc_list
+            stage.update(screen_scroll_x, screen_scroll_y)
+            item_group.update(player, screen_scroll_x, screen_scroll_y)
 
-        for enemy in enemies:
-            projectile = enemy.ai(player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
+            enemies = stage.npc_list
+
+            for enemy in enemies:
+                projectile = enemy.ai(player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
+                
+                if projectile:
+                    enemy_projeciles_group.add(projectile)
+                
+                enemy.update(player)
+            player.update(None)
+
+            particle = current_weapon.update(player)
             
-            if projectile:
-                enemy_projeciles_group.add(projectile)
-            
-            enemy.update(player)
-        player.update(None)
+            if particle:
+                particles_group.add(particle)  
+            for particle in particles_group:
+                damage, damage_pos = particle.update(enemies, player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
+                if damage > 0:
+                    damage_text_group.add(
+                        DamageText(damage_pos.centerx, damage_pos.y, damage, DAMAGE_TEXT_COLOUR)
+                    )
 
-        particle = current_weapon.update(player)
-        
-        if particle:
-            particles_group.add(particle)  
-        for particle in particles_group:
-            damage, damage_pos = particle.update(enemies, player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
-            if damage > 0:
-                damage_text_group.add(
-                    DamageText(damage_pos.centerx, damage_pos.y, damage, DAMAGE_TEXT_COLOUR)
-                )
+            for enemy_projectile in enemy_projeciles_group:
+                enemy_projectile.update(enemies, player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
 
-        for enemy_projectile in enemy_projeciles_group:
-            enemy_projectile.update(enemies, player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
-
-        damage_text_group.update(screen_scroll_x, screen_scroll_y)
+            damage_text_group.update(screen_scroll_x, screen_scroll_y)
 
         stage.draw(screen)
 
@@ -152,6 +166,75 @@ def main():
         
         ui.draw_weapon_tooltip(weapon_rect, current_weapon)
         ui.draw_skill_tooltip(skill_rect, current_skill)
+
+        if level_complete:
+            start_intro = True
+            stage_num += 1
+            stage = reset_level()
+            stage.read_from_file(f"{stage_num}.csv")
+
+            temp_health = player.health
+            temp_energy = player.energy
+            temp_strength = player.strength
+            temp_intelligence = player.intelligence
+            temp_dexterity = player.dexterity
+            temp_total_xp = player.total_xp
+            temp_xp_to_next_level = player.xp_to_next_level     
+            temp_max_hp = player.max_hp
+            temp_max_ep = player.max_ep
+            temp_melee_attack = player.melee_attack
+            temp_ranged_attack = player.ranged_attack
+            temp_special_attack = player.special_attack
+            temp_melee_defense = player.melee_defense
+            temp_ranged_defense = player.ranged_defense
+            temp_special_defense = player.special_defense
+            temp_speed = player.speed
+            temp_coins = player.coins
+
+            player = stage.player
+            enemies = stage.npc_list
+
+            player.health = temp_health
+            player.energy = temp_energy
+            player.strength = temp_strength
+            player.intelligence = temp_intelligence
+            player.dexterity = temp_dexterity
+            player.total_xp = temp_total_xp
+            player.xp_to_next_level = temp_xp_to_next_level     
+            player.max_hp = temp_max_hp
+            player.max_ep = temp_max_ep
+            player.melee_attack = temp_melee_attack
+            player.ranged_attack = temp_ranged_attack
+            player.special_attack = temp_special_attack
+            player.melee_defense = temp_melee_defense
+            player.ranged_defense = temp_ranged_defense
+            player.special_defense = temp_special_defense
+            player.speed = temp_speed
+            player.coins = temp_coins
+
+            for item in stage.item_list:
+                item_group.add(item)
+
+        if start_intro:
+            if intro_fade.fade(screen):
+                start_intro = False
+                intro_fade.fade_counter = 0
+
+        if not player.alive:
+            if gameover_fade.fade(screen):
+                if restart_button.draw(screen):
+                    gameover_fade.fade_counter = 0
+                    start_intro = True
+                    start_intro = True
+                    stage_num = 1
+                    stage = reset_level()
+                    stage.read_from_file(f"{stage_num}.csv")
+
+                    player = stage.player
+                    enemies = stage.npc_list
+
+                    for item in stage.item_list:
+                        item_group.add(item)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -188,7 +271,6 @@ def main():
                     if particle:
                         particles_group.add(particle)
             
-
         if ui_show_stats:
             ui.draw_stats(player)
 

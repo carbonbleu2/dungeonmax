@@ -44,9 +44,11 @@ class Character:
         surface.blit(flipped_image, self.rect)
         # pygame.draw.rect(surface, NamedColour.RED.value, self.rect, width=1)
 
-    def move(self, dx, dy, obstacles):
+    def move(self, dx, dy, obstacles, exit_tile=None):
         screen_scroll_x = 0
         screen_scroll_y = 0
+
+        level_complete = False
 
         self.running = False
 
@@ -78,6 +80,11 @@ class Character:
                     self.rect.top = obstacle[1].bottom
 
         if self.char_type == 'player':
+            if exit_tile[1].colliderect(self.rect):
+                exit_distance = pygame.math.Vector2(exit_tile[1].center).distance_to(self.rect.center)
+                if exit_distance < 20:
+                    level_complete = True
+
             if self.rect.right > (SCREEN_WIDTH - SCROLL_THRESHOLD):
                 screen_scroll_x = (SCREEN_WIDTH - SCROLL_THRESHOLD) - self.rect.right
                 self.rect.right = SCREEN_WIDTH - SCROLL_THRESHOLD
@@ -92,7 +99,7 @@ class Character:
                 screen_scroll_y = SCROLL_THRESHOLD - self.rect.top
                 self.rect.top = SCROLL_THRESHOLD
 
-        return screen_scroll_x, screen_scroll_y
+        return screen_scroll_x, screen_scroll_y, level_complete
 
     def update(self, player):
         if self.health <= 0:

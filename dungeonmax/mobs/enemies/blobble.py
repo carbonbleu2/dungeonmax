@@ -20,7 +20,7 @@ class Blobble(Character):
         self.health = self.max_hp
         self.energy = self.max_ep
 
-        self.invincibility_cooldown = 300
+        self.invincibility_cooldown = 1000
         
         self.speed = 3
 

@@ -19,10 +19,10 @@ class Player(Character):
         self.calibrate_stats()
 
         # Current stats
-        self.health = self.max_hp
+        self.health = 5
         self.energy = self.max_ep
 
-        self.invincibility_cooldown = 300
+        self.invincibility_cooldown = 400
 
     def calibrate_stats(self):
         self.max_hp = int(self.strength * 10)

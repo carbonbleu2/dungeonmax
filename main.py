@@ -54,6 +54,7 @@ def main():
     particles_group = pygame.sprite.Group()
     damage_text_group = pygame.sprite.Group()
     item_group = pygame.sprite.Group()
+    enemy_projeciles_group = pygame.sprite.Group()
 
     for item in stage.item_list:
         item_group.add(item)
@@ -104,7 +105,11 @@ def main():
         enemies = stage.npc_list
 
         for enemy in enemies:
-            enemy.ai(player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
+            projectile = enemy.ai(player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
+            
+            if projectile:
+                enemy_projeciles_group.add(projectile)
+            
             enemy.update(player)
         player.update(None)
 
@@ -118,6 +123,10 @@ def main():
                 damage_text_group.add(
                     DamageText(damage_pos.centerx, damage_pos.y, damage, DAMAGE_TEXT_COLOUR)
                 )
+
+        for enemy_projectile in enemy_projeciles_group:
+            enemy_projectile.update(enemies, player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
+
         damage_text_group.update(screen_scroll_x, screen_scroll_y)
 
         stage.draw(screen)
@@ -128,8 +137,11 @@ def main():
         player.draw(screen)
         current_weapon.draw(screen)
 
-        for arrow in particles_group:
-            arrow.draw(screen)
+        for projectile in particles_group:
+            projectile.draw(screen)
+
+        for enemy_projectile in enemy_projeciles_group:
+            enemy_projectile.draw(screen)
 
         item_group.draw(screen)
         damage_text_group.draw(screen)

@@ -54,7 +54,7 @@ class RecruitsBow(Bow):
     GRAPHIC = os.path.join('graphics', 'weapons', 'bows', f"{CODENAME}.png")
 
     DAMAGE = 5
-    ATTACK_SPEED = 3
+    ATTACK_SPEED = 2
     ARROW_SPEED = 10
     DAMAGE_RANGE = 10
 

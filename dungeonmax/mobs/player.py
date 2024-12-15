@@ -31,6 +31,8 @@ class Player(Character):
         self.resting_deactivate_timer = pygame.time.get_ticks()
         self.resting_cooldown = 5000
 
+        self.coin_xp_gain = 2
+
     def calibrate_stats(self):
         self.max_hp = int(self.strength * 10)
         self.max_ep = int(self.intelligence * 8)
@@ -49,7 +51,7 @@ class Player(Character):
     def collect(self, item):
         if item.name == 'Coin':
             self.coins += 1
-            self.gain_xp(5)
+            self.gain_xp(self.coin_xp_gain)
         elif item.name == 'HealthPotion':
             self.health = min(self.max_hp, self.health + 10)
         else:

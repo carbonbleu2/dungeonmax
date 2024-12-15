@@ -11,7 +11,7 @@ class Skill:
 
         self.codename = codename
 
-        self.description = None
+        self.description = description
 
         self.last_used = 0
         self.can_be_used = True

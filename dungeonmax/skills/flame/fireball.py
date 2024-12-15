@@ -6,7 +6,7 @@ from dungeonmax.particles.skill.fireball import FireballProjectile
 from dungeonmax.skills.skill import Skill
 
 class Fireball(Skill):
-    DAMAGE = 3
+    DAMAGE = 8
     COOLDOWN = 2
     CODENAME = "Fireball"
     SKILL_CATEGORY = "flame"

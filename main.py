@@ -161,11 +161,12 @@ def main():
         damage_text_group.draw(screen)
 
         ui.draw_info(player, stage_num)
+        ui.draw_message_box()
         weapon_rect = ui.draw_current_weapon(current_weapon)
         skill_rect = ui.draw_current_skill(current_skill)
-        
         ui.draw_weapon_tooltip(weapon_rect, current_weapon)
         ui.draw_skill_tooltip(skill_rect, current_skill)
+        ui.draw_buffs(player)
 
         if level_complete:
             start_intro = True
@@ -191,6 +192,9 @@ def main():
             temp_speed = player.speed
             temp_coins = player.coins
 
+            temp_health_regen_rate = player.health_regen_rate
+            temp_energy_regen_rate = player.energy_regen_rate
+
             player = stage.player
             enemies = stage.npc_list
 
@@ -211,6 +215,9 @@ def main():
             player.special_defense = temp_special_defense
             player.speed = temp_speed
             player.coins = temp_coins
+
+            player.health_regen_rate = temp_health_regen_rate
+            player.energy_regen_rate = temp_energy_regen_rate
 
             for item in stage.item_list:
                 item_group.add(item)
@@ -268,6 +275,7 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 3:
                     particle = current_skill.on_cast(player)
+                    player.deactivate_resting()
                     if particle:
                         particles_group.add(particle)
             

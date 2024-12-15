@@ -61,6 +61,7 @@ class Blobble(Character):
             if dist < self.attack_range and not player.invincible and self.alive:
                 player.health -= max(1, self.melee_attack - player.melee_defense)
                 player.activate_invincibility()
+                player.deactivate_resting()
 
         return None
 

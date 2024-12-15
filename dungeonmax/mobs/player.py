@@ -1,7 +1,9 @@
 import random
 
 import pygame
+from dungeonmax.buffs.resting import Resting
 from dungeonmax.mobs.character import Character
+from dungeonmax.settings import FPS
 
 class Player(Character):
     def __init__(self, x, y, animations):
@@ -19,10 +21,15 @@ class Player(Character):
         self.calibrate_stats()
 
         # Current stats
-        self.health = 5
+        self.health = self.max_hp
         self.energy = self.max_ep
 
+        self.resting = True
+
         self.invincibility_cooldown = 400
+
+        self.resting_deactivate_timer = pygame.time.get_ticks()
+        self.resting_cooldown = 5000
 
     def calibrate_stats(self):
         self.max_hp = int(self.strength * 10)
@@ -33,6 +40,9 @@ class Player(Character):
         self.melee_defense = int(self.strength * 0.50)
         self.ranged_defense = int(self.dexterity * 0.50)
         self.special_defense = int(self.intelligence * 0.50)
+
+        self.health_regen_rate = (self.strength * 0.08) / FPS
+        self.energy_regen_rate = (self.intelligence * 0.06) / FPS
 
         self.speed = int(self.dexterity * 0.7)
 
@@ -78,3 +88,27 @@ class Player(Character):
         if pygame.mouse.get_pos()[0] >= self.rect.centerx:
             return 'right'
         return 'left'
+    
+    def update(self, player):
+        super().update(player)
+        buff = Resting(self)
+        if self.resting:
+            if buff.name not in self.buffs:
+                self.add_buff(buff)
+            self.buffs[buff.name].active = True
+        else:
+            if buff.name in self.buffs: 
+                self.buffs[buff.name].active = False
+
+        if not self.resting and pygame.time.get_ticks() - self.resting_deactivate_timer > self.resting_cooldown:
+            self.resting = True
+
+    def deactivate_resting(self):
+        self.resting = False
+        self.resting_deactivate_timer = pygame.time.get_ticks()
+
+    def move(self, dx, dy, obstacles, exit_tile=None):
+        val = super().move(dx, dy, obstacles, exit_tile)
+        if dx != 0 or dy != 0:
+            self.deactivate_resting()
+        return val

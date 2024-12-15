@@ -1,7 +1,7 @@
 import pygame
 
 class Weapon:
-    def __init__(self, image, name, codename, ui_graphic, attack_speed):
+    def __init__(self, image, name, codename, ui_graphic, attack_speed, description):
         self.name = name
         self.original_image = pygame.image.load(image).convert_alpha()
         self.angle = 0
@@ -16,3 +16,5 @@ class Weapon:
         self.codename = codename
 
         self.attack_speed = attack_speed
+
+        self.description = description

@@ -77,6 +77,7 @@ class Chomper(Character):
             if dist < self.attack_range and not player.invincible and self.alive:
                 player.health -= max(1, self.melee_attack - player.melee_defense)
                 player.activate_invincibility()
+                player.deactivate_resting()
 
             if dist < self.FIREBALL_START_DISTANCE:
                 if pygame.time.get_ticks() - self.last_attack >= fireball_cooldown:

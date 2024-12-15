@@ -66,23 +66,32 @@ class UI:
         mouse_pos = pygame.mouse.get_pos()
         if rect.collidepoint(mouse_pos):
             tooltip = pygame.Rect(mouse_pos[0], mouse_pos[1], 200, 50)
-            pygame.draw.rect(self.display_surface, '#ffaabb', tooltip)
+            pygame.draw.rect(self.display_surface, '#5e1916', tooltip)
             self.draw_text(weapon.name, 'white', mouse_pos[0] + 10, mouse_pos[1] + 10)
+            self.draw_message_text(weapon.description)
 
     def draw_skill_tooltip(self, rect, skill):
         mouse_pos = pygame.mouse.get_pos()
         if rect.collidepoint(mouse_pos):
             tooltip = pygame.Rect(mouse_pos[0], mouse_pos[1], 200, 50)
-            pygame.draw.rect(self.display_surface, '#ffaabb', tooltip)
+            pygame.draw.rect(self.display_surface, '#5e1916', tooltip)
             self.draw_text(skill.name, 'white', mouse_pos[0] + 10, mouse_pos[1] + 10)
+            self.draw_message_text(skill.description)
         
     def draw_buffs(self, player):
-        buff_start = 390
         for i, (_, buff) in enumerate(player.buffs.items()):
             if buff.active:
-                rect = pygame.Rect(450 + 18 * i, 10, 18, 18)
+                rect = pygame.Rect(11 + 18 * i, 60, 18, 18)
                 buff_surface = buff.image
                 buff_rect = buff_surface.get_rect(center=rect.center)
+                if buff_rect.collidepoint(pygame.mouse.get_pos()):
+                    self.draw_message_text(buff.description)
                 self.display_surface.blit(buff_surface, buff_rect)
 
-        
+    def draw_message_box(self):
+        pygame.draw.rect(self.display_surface, '#3d2328', (0, SCREEN_HEIGHT - UI_MESSAGE_BAR_HEIGHT, SCREEN_WIDTH, UI_MESSAGE_BAR_HEIGHT))
+
+    def draw_message_text(self, message):
+        font = pygame.font.Font(UI_FONT, UI_MESSAGE_FONT_SIZE)
+        message_text = font.render(str(message), False, 'white')
+        self.display_surface.blit(message_text, (10, SCREEN_HEIGHT - (UI_MESSAGE_BAR_HEIGHT - 5)))

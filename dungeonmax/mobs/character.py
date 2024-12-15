@@ -147,6 +147,10 @@ class Character:
         if buff.name not in self.buffs:
             self.buffs[buff.name] = buff
 
+    def deactivate_buff(self, buff):
+        if buff.name in self.buffs:
+            self.buffs[buff.name].active = False
+
     def ai(self, player, obstacles, scroll_x, scroll_y):
         self.rect.x += scroll_x
         self.rect.y += scroll_y

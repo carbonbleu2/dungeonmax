@@ -6,8 +6,9 @@ from dungeonmax.weapons.swing import ArcSwing
 from dungeonmax.weapons.weapon import Weapon
 
 class Sword(Weapon):
-    def __init__(self, image, name, codename, ui_graphic, attack_speed, swing_speed, damage):
-        super().__init__(image, name, codename, ui_graphic, attack_speed)
+    def __init__(self, image, name, codename, ui_graphic, 
+                 attack_speed, swing_speed, damage, description):
+        super().__init__(image, name, codename, ui_graphic, attack_speed, description)
         self.weapon_type = 'Sword'
         self.used = False
         self.attack_speed = attack_speed
@@ -41,6 +42,7 @@ class Sword(Weapon):
             self.swinging = True
             self.swing_angle = -self.max_swing_angle // 2  # Start from the leftmost angle
             self.last_used = pygame.time.get_ticks()
+            player.deactivate_resting()
 
         # Update the swing angle if swinging
         if self.swinging:
@@ -62,6 +64,8 @@ class RecruitsSword(Sword):
     UI_GRAPHIC = os.path.join('graphics', 'weapons', 'swords', f"{CODENAME}Graphic.png")
     GRAPHIC = os.path.join('graphics', 'weapons', 'swords', f"{CODENAME}.png")
 
+    DESCRIPTION = "A basic sword to get novice fighters acquainted with the mechanics"
+
     DAMAGE = 5
     ATTACK_SPEED = 4
     SWING_SPEED = 6
@@ -69,5 +73,7 @@ class RecruitsSword(Sword):
     SCALE_FACTOR = 1.2
 
     def __init__(self):
-        super().__init__(self.GRAPHIC, self.NAME, self.CODENAME, self.UI_GRAPHIC, self.ATTACK_SPEED, self.SWING_SPEED, self.DAMAGE)
+        super().__init__(self.GRAPHIC, self.NAME, self.CODENAME, self.UI_GRAPHIC, 
+                         self.ATTACK_SPEED, self.SWING_SPEED, self.DAMAGE,
+                         self.DESCRIPTION)
         self.image = pygame.transform.scale_by(self.image, self.SCALE_FACTOR)

@@ -7,8 +7,8 @@ from dungeonmax.weapons.weapon import Weapon
 
 class Bow(Weapon):
     def __init__(self, image, name, codename, ui_graphic, attack_speed, 
-                 arrow_speed, damage, projectile_class, damage_range):
-        super().__init__(image, name, codename, ui_graphic, attack_speed)
+                 arrow_speed, damage, projectile_class, damage_range, description):
+        super().__init__(image, name, codename, ui_graphic, attack_speed, description)
         self.weapon_type = 'Bow'
         self.projectile_class = projectile_class
         self.fired = False
@@ -35,6 +35,7 @@ class Bow(Weapon):
                                           range_=self.damage_range)
             self.fired = True
             self.last_used = pygame.time.get_ticks()
+            player.deactivate_resting()
         if not pygame.mouse.get_pressed()[0]:
             self.fired = False
 
@@ -58,8 +59,12 @@ class RecruitsBow(Bow):
     ARROW_SPEED = 10
     DAMAGE_RANGE = 10
 
+    DESCRIPTION = "A basic bow to teach archery to beginners. Fires basic wooden arrows"
+
     def __init__(self):
-        super().__init__(self.GRAPHIC, self.NAME, self.CODENAME, self.UI_GRAPHIC, self.ATTACK_SPEED, self.ARROW_SPEED, self.DAMAGE, WoodenArrow, self.DAMAGE_RANGE)
+        super().__init__(self.GRAPHIC, self.NAME, self.CODENAME, 
+                         self.UI_GRAPHIC, self.ATTACK_SPEED, self.ARROW_SPEED, self.DAMAGE, WoodenArrow, 
+                         self.DAMAGE_RANGE, self.DESCRIPTION)
 
     def on_hit(self, player, enemy):
         pass

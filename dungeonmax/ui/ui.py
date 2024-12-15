@@ -22,8 +22,10 @@ class UI:
         text_rect = text_surface.get_rect(center = bg_rect.center)
         self.display_surface.blit(text_surface, text_rect)
 
-    def draw_text(self, text, colour, x, y):
-        image = self.font.render(text, False, colour)
+    def draw_text(self, text, colour, x, y, font=None):
+        if font is None:
+            font = self.font
+        image = font.render(text, False, colour)
         self.display_surface.blit(image, (x, y))
 
     def draw_info(self, player, stage_num):
@@ -38,9 +40,31 @@ class UI:
         self.draw_text(f"XP to next level: {player.xp_to_next_level}", 'white', SCREEN_WIDTH - 200, 70)
 
     def draw_stats(self, player):
-        rect = pygame.Rect(0, 0, 700, 500)
+        image = pygame.image.load(STATS_SCREEN).convert_alpha()
+        rect = image.get_rect()
         rect.center = self.display_surface.get_rect().center
-        pygame.draw.rect(self.display_surface, UI_INFO_PANEL_COLOUR, rect)
+        self.display_surface.blit(image, rect)
+        
+        font = pygame.font.Font(STATS_FONT, STATS_FONT_SIZE)
+
+        self.draw_text(str(player.strength), 'white', rect.left + 120, rect.top + 16, font)
+        self.draw_text(str(player.dexterity), 'white', rect.left + 120, rect.top + 60, font)
+        self.draw_text(str(player.intelligence), 'white', rect.left + 120, rect.top + 104, font)
+
+        self.draw_text(str(player.melee_attack), 'white', rect.left + 160, rect.top + 148, font)
+        self.draw_text(str(player.ranged_attack), 'white', rect.left + 160, rect.top + 176, font)
+        self.draw_text(str(player.special_attack), 'white', rect.left + 160, rect.top + 208, font)
+
+        self.draw_text(str(player.melee_defense), 'white', rect.left + 352, rect.top + 148, font)
+        self.draw_text(str(player.ranged_defense), 'white', rect.left + 352, rect.top + 176, font)
+        self.draw_text(str(player.special_defense), 'white', rect.left + 352, rect.top + 208, font)
+
+        self.draw_text(str(player.speed), 'white', rect.left + 441, rect.top + 194, font)
+
+        self.draw_text(str(player.level), 'white', rect.left + 428, rect.top + 22, font)
+        self.draw_text(str(player.xp_to_next_level), 'white', rect.left + 428, rect.top + 78, font)
+
+
 
     def draw_current_weapon(self, weapon):
         rect = pygame.Rect(320, 10, 40, 40)

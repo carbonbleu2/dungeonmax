@@ -41,3 +41,9 @@ UI_MESSAGE_BAR_HEIGHT = 30
 UI_MESSAGE_FONT_SIZE = 15
 
 SCROLL_THRESHOLD = 200
+
+STATS_SCREEN = os.path.join("graphics", "ui", "statscreen.png")
+
+STATS_FONT = os.path.join('fonts', 'Minecraftia-Regular.ttf')
+STATS_FONT_SIZE = 20
+STATS_FONT_COLOUR = 'black'

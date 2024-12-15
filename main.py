@@ -54,6 +54,8 @@ def main():
     item_group = pygame.sprite.Group()
     enemy_projeciles_group = pygame.sprite.Group()
 
+    all_enemies_dead = False
+
     def reset_level():
         particles_group.empty()
         damage_text_group.empty()
@@ -125,6 +127,9 @@ def main():
                     enemy_projeciles_group.add(projectile)
                 
                 enemy.update(player)
+
+            all_enemies_dead = all([not enemy.alive for enemy in enemies])
+
             player.update(None)
 
             particle = current_weapon.update(player)
@@ -169,58 +174,63 @@ def main():
         ui.draw_buffs(player)
 
         if level_complete:
-            start_intro = True
-            stage_num += 1
-            stage = reset_level()
-            stage.read_from_file(f"{stage_num}.csv")
+            if all_enemies_dead:
+                start_intro = True
+                stage_num += 1
+                stage = reset_level()
+                stage.read_from_file(f"{stage_num}.csv")
 
-            temp_health = player.health
-            temp_energy = player.energy
-            temp_strength = player.strength
-            temp_intelligence = player.intelligence
-            temp_dexterity = player.dexterity
-            temp_total_xp = player.total_xp
-            temp_xp_to_next_level = player.xp_to_next_level     
-            temp_max_hp = player.max_hp
-            temp_max_ep = player.max_ep
-            temp_melee_attack = player.melee_attack
-            temp_ranged_attack = player.ranged_attack
-            temp_special_attack = player.special_attack
-            temp_melee_defense = player.melee_defense
-            temp_ranged_defense = player.ranged_defense
-            temp_special_defense = player.special_defense
-            temp_speed = player.speed
-            temp_coins = player.coins
+                temp_health = player.health
+                temp_energy = player.energy
+                temp_strength = player.strength
+                temp_intelligence = player.intelligence
+                temp_dexterity = player.dexterity
+                temp_total_xp = player.total_xp
+                temp_xp_to_next_level = player.xp_to_next_level     
+                temp_max_hp = player.max_hp
+                temp_max_ep = player.max_ep
+                temp_melee_attack = player.melee_attack
+                temp_ranged_attack = player.ranged_attack
+                temp_special_attack = player.special_attack
+                temp_melee_defense = player.melee_defense
+                temp_ranged_defense = player.ranged_defense
+                temp_special_defense = player.special_defense
+                temp_speed = player.speed
+                temp_coins = player.coins
+                temp_level = player.level
 
-            temp_health_regen_rate = player.health_regen_rate
-            temp_energy_regen_rate = player.energy_regen_rate
+                temp_health_regen_rate = player.health_regen_rate
+                temp_energy_regen_rate = player.energy_regen_rate
 
-            player = stage.player
-            enemies = stage.npc_list
+                player = stage.player
+                enemies = stage.npc_list
 
-            player.health = temp_health
-            player.energy = temp_energy
-            player.strength = temp_strength
-            player.intelligence = temp_intelligence
-            player.dexterity = temp_dexterity
-            player.total_xp = temp_total_xp
-            player.xp_to_next_level = temp_xp_to_next_level     
-            player.max_hp = temp_max_hp
-            player.max_ep = temp_max_ep
-            player.melee_attack = temp_melee_attack
-            player.ranged_attack = temp_ranged_attack
-            player.special_attack = temp_special_attack
-            player.melee_defense = temp_melee_defense
-            player.ranged_defense = temp_ranged_defense
-            player.special_defense = temp_special_defense
-            player.speed = temp_speed
-            player.coins = temp_coins
+                player.health = temp_health
+                player.energy = temp_energy
+                player.strength = temp_strength
+                player.intelligence = temp_intelligence
+                player.dexterity = temp_dexterity
+                player.total_xp = temp_total_xp
+                player.xp_to_next_level = temp_xp_to_next_level     
+                player.max_hp = temp_max_hp
+                player.max_ep = temp_max_ep
+                player.melee_attack = temp_melee_attack
+                player.ranged_attack = temp_ranged_attack
+                player.special_attack = temp_special_attack
+                player.melee_defense = temp_melee_defense
+                player.ranged_defense = temp_ranged_defense
+                player.special_defense = temp_special_defense
+                player.speed = temp_speed
+                player.coins = temp_coins
+                player.level = temp_level
 
-            player.health_regen_rate = temp_health_regen_rate
-            player.energy_regen_rate = temp_energy_regen_rate
+                player.health_regen_rate = temp_health_regen_rate
+                player.energy_regen_rate = temp_energy_regen_rate
 
-            for item in stage.item_list:
-                item_group.add(item)
+                for item in stage.item_list:
+                    item_group.add(item)
+            else:
+                ui.draw_message_text("You must kill all enemies to proceed to the next stage")
 
         if start_intro:
             if intro_fade.fade(screen):

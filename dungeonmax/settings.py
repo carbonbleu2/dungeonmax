@@ -16,12 +16,12 @@ BG_COLOUR = '#141414'
 FPS = 60
 
 DAMAGE_TEXT_FONT = pygame.font.Font(
-    os.path.join('fonts', 'small_pixel.ttf'),
+    os.path.join('fonts', 'Minecraftia-Regular.ttf'),
     15
 )
 DAMAGE_TEXT_COLOUR = 'red'
 
-UI_FONT = os.path.join('fonts', 'small_pixel.ttf')
+UI_FONT = os.path.join('fonts', 'Minecraftia-Regular.ttf')
 UI_FONT_SIZE = 15
 UI_FONT_COLOUR = 'black'
 

@@ -26,7 +26,7 @@ class Player(Character):
 
         self.resting = True
 
-        self.invincibility_cooldown = 400
+        self.invincibility_cooldown = 800
 
         self.resting_deactivate_timer = pygame.time.get_ticks()
         self.resting_cooldown = 5000
@@ -64,9 +64,9 @@ class Player(Character):
 
     def level_up(self):
         self.level += 1
-        self.strength += random.randint(1, 2)
+        self.strength += 2
         self.dexterity += 0.2
-        self.intelligence += random.randint(1, 2)
+        self.intelligence += 1
         self.calibrate_stats()
 
     def stats(self):

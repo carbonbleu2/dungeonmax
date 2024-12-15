@@ -22,7 +22,7 @@ class Blobble(Character):
 
         self.invincibility_cooldown = 1000
         
-        self.speed = 3
+        self.speed = 2
 
         self.maintain_distance = 2
         self.line_of_sight = 50

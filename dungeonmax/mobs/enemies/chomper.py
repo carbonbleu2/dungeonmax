@@ -36,7 +36,7 @@ class Chomper(Character):
 
         self.invincibility_cooldown = 500
         
-        self.speed = 3
+        self.speed = 2
 
         self.maintain_distance = 2
 

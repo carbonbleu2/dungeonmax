@@ -2,6 +2,8 @@ import random
 
 import pygame
 from dungeonmax.buffs.resting import Resting
+from dungeonmax.gods.god import God
+from dungeonmax.gods.gods_enum import GodsRepository
 from dungeonmax.mobs.character import Character
 from dungeonmax.settings import FPS
 
@@ -114,3 +116,4 @@ class Player(Character):
         if dx != 0 or dy != 0:
             self.deactivate_resting()
         return val
+            

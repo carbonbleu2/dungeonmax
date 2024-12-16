@@ -3,7 +3,7 @@ import random
 import pygame
 
 class ArcSwing(pygame.sprite.Sprite):
-    def __init__(self, image, x, y, angle, proj_speed, damage, on_hit):
+    def __init__(self, image, x, y, angle, proj_speed, damage, on_hit, source='Player'):
         pygame.sprite.Sprite.__init__(self)
 
         self.pivot = (x, y)  # Pivot point (center of the swing)
@@ -20,6 +20,7 @@ class ArcSwing(pygame.sprite.Sprite):
 
         self.radius = 30     
         self.on_hit = on_hit
+        self.source = 'Player'
         
     def update(self, enemies, player, obstacles, scroll_x, scroll_y):
         self.rect.x += scroll_x

@@ -2,7 +2,7 @@ import pygame
 
 
 class AnimatedParticle(pygame.sprite.Sprite):
-    def __init__(self, x, y, name, animations, stick_to_player=False, duration=-1):
+    def __init__(self, x, y, name, animations, stick_to_player=False, duration=-1, source='Player'):
         pygame.sprite.Sprite.__init__(self)
         self.name = name
         self.animations = animations
@@ -14,6 +14,7 @@ class AnimatedParticle(pygame.sprite.Sprite):
         self.stick_to_player = stick_to_player
         self.start_time = pygame.time.get_ticks()
         self.duration = duration
+        self.source = source
 
     def update(self, enemies, player, *args, **kwargs):
         if self.stick_to_player:

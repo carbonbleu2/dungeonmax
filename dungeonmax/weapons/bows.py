@@ -2,6 +2,7 @@ import os
 import math
 
 import pygame
+from dungeonmax.gods.gods_enum import GodsRepository
 from dungeonmax.particles.arrows import WoodenArrow
 from dungeonmax.weapons.weapon import Weapon
 
@@ -30,6 +31,10 @@ class Bow(Weapon):
 
         arrow = None
         if pygame.mouse.get_pressed()[0] and not self.fired and pygame.time.get_ticks() - self.last_used >= shot_cooldown:
+            trog = GodsRepository.GODS["Trog"]
+            if trog.active and not trog.abandoned:
+                GodsRepository.GODS["Trog"].favour -= 1
+            
             arrow = self.projectile_class(self.rect.centerx, self.rect.centery, self.angle, 
                                           self.projectile_speed, self.damage, self.on_hit,
                                           range_=self.damage_range)

@@ -13,6 +13,7 @@ class Stage:
         self.item_list = []
         self.player = None
         self.npc_list = []
+        self.floor_tiles = []
 
     def process_tiles(self, data):
         self.length = len(data)
@@ -27,6 +28,8 @@ class Stage:
                     image_rect.center = image_x, image_y
                     tile = [image, image_rect, image_x, image_y]
                     self.map_tiles.append(tile)
+                    if col in FLOOR_TILE_IDS:
+                        self.floor_tiles.append(tile)
                     if col in WALL_TILE_IDS:
                         self.obstacle_tiles.append(tile)
                     if col in PORTAL_TILE_IDS:
@@ -45,7 +48,12 @@ class Stage:
                         self.npc_list.append(character)
                         tile[0] = TileLoader.TILE_IMAGES[random.choice(FLOOR_TILE_IDS)]
 
-                
+    def spawn_enemy(self, enemy_id):
+        random_floor_tile = random.choice(self.floor_tiles)
+        char_class = TILE_TO_CHAR_CLASSES[enemy_id]
+        character = char_class(random_floor_tile[2], random_floor_tile[3], AnimationRepository.MOB_ANIMS)
+        self.npc_list.append(character)
+
 
     def read_from_file(self, file_name):
         map_data = []

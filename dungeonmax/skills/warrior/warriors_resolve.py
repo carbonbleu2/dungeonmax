@@ -30,6 +30,7 @@ class WarriorsResolve(Skill):
     def on_cast(self, player):
         particle = None
         if player.energy >= self.cost and self.can_be_used:
+            super().on_cast(player)
             player.energy = max(player.energy - self.cost, 0)
             self.last_used = pygame.time.get_ticks()
             self.can_be_used = False

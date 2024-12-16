@@ -22,13 +22,8 @@ class MapGen:
             map_data[0][j] = WallTiles.STONE_BRICK_WALL1
             map_data[-1][j] = WallTiles.STONE_BRICK_WALL1
 
-        # print(map_data)
-
         map_data[self.height // 2][self.width // 2] = CharTiles.PLAYER
         map_data[0][self.width // 2] = ExitTiles.STONE_EXIT1
-
-        for row in map_data:
-            print(row)
 
         stage = Stage()
         stage.process_tiles(map_data)

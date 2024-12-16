@@ -2,6 +2,7 @@ import math
 import os
 import pygame
 
+from dungeonmax.gods.gods_enum import GodsRepository
 from dungeonmax.weapons.swing import ArcSwing
 from dungeonmax.weapons.weapon import Weapon
 
@@ -56,7 +57,9 @@ class Sword(Weapon):
         pass
 
     def on_hit(self, player, enemy):
-        pass
+        trog = GodsRepository.GODS["Trog"]
+        if trog.active and not trog.abandoned:
+            GodsRepository.GODS["Trog"].favour += 1
 
 class RecruitsSword(Sword):
     NAME = "Recruit's Sword"

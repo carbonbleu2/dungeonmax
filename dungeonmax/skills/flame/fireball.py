@@ -27,6 +27,7 @@ class Fireball(Skill):
         fireball = None
 
         if player.energy >= self.cost and self.can_be_used:
+            super().on_cast(player)
             player.energy = max(player.energy - self.cost, 0)
             
             mouse_pos = pygame.mouse.get_pos()

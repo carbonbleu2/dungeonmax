@@ -91,6 +91,17 @@ class UI:
         if skill.time_left_till_next_use > 0:
             self.draw_text(str(skill.time_left_till_next_use), 'black', skill_rect.centerx - 10, 56)
         return skill_rect
+    
+    def draw_current_god(self, god):
+        rect = pygame.Rect(420, 10, 40, 40)
+        pygame.draw.rect(self.display_surface, 'grey', rect)
+        pygame.draw.rect(self.display_surface, 'black', rect, 2)
+        if god is not None:
+            god_image = god.altar_image
+            god_rect = god_image.get_rect(center=rect.center)
+            self.display_surface.blit(god_image, god_rect)
+            return god_rect
+        return rect
         
     def draw_weapon_tooltip(self, rect, weapon):
         mouse_pos = pygame.mouse.get_pos()

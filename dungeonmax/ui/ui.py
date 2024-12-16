@@ -45,26 +45,32 @@ class UI:
         rect.center = self.display_surface.get_rect().center
         self.display_surface.blit(image, rect)
         
-        font = pygame.font.Font(STATS_FONT, STATS_FONT_SIZE)
+        self.draw_stat(player, 'strength', rect, 108, 20, 52, 20, font_size=20)
+        self.draw_stat(player, 'dexterity', rect, 108, 64, 52, 20, font_size=20)
+        self.draw_stat(player, 'intelligence', rect, 108, 108, 52, 20, font_size=20)
 
-        self.draw_text(str(player.strength), 'white', rect.left + 120, rect.top + 16, font)
-        self.draw_text(str(player.dexterity), 'white', rect.left + 120, rect.top + 60, font)
-        self.draw_text(str(player.intelligence), 'white', rect.left + 120, rect.top + 104, font)
+        self.draw_stat(player, 'melee_attack', rect, 144, 152, 48, 16, font_size=20)
+        self.draw_stat(player, 'ranged_attack', rect, 144, 180, 48, 16, font_size=20)
+        self.draw_stat(player, 'special_attack', rect, 144, 212, 48, 16, font_size=20)
 
-        self.draw_text(str(player.melee_attack), 'white', rect.left + 160, rect.top + 148, font)
-        self.draw_text(str(player.ranged_attack), 'white', rect.left + 160, rect.top + 176, font)
-        self.draw_text(str(player.special_attack), 'white', rect.left + 160, rect.top + 208, font)
+        self.draw_stat(player, 'melee_defense', rect, 336, 152, 57, 16, font_size=20)
+        self.draw_stat(player, 'ranged_defense', rect, 336, 180, 57, 16, font_size=20)
+        self.draw_stat(player, 'special_defense', rect, 336, 212, 57, 16, font_size=20)
 
-        self.draw_text(str(player.melee_defense), 'white', rect.left + 352, rect.top + 148, font)
-        self.draw_text(str(player.ranged_defense), 'white', rect.left + 352, rect.top + 176, font)
-        self.draw_text(str(player.special_defense), 'white', rect.left + 352, rect.top + 208, font)
+        self.draw_stat(player, 'speed', rect, 404, 184, 88, 44, font_size=30)
+        self.draw_stat(player, 'level', rect, 392, 20, 92, 28, font_size=25)
+        self.draw_stat(player, 'xp_to_next_level', rect, 392, 76, 92, 28, font_size=25)
 
-        self.draw_text(str(player.speed), 'white', rect.left + 441, rect.top + 194, font)
-
-        self.draw_text(str(player.level), 'white', rect.left + 428, rect.top + 22, font)
-        self.draw_text(str(player.xp_to_next_level), 'white', rect.left + 428, rect.top + 78, font)
-
-
+    def draw_stat(self, player, stat_name, stat_rect, 
+                  rel_left, rel_top, rect_width, rect_height, 
+                  font_size=STATS_FONT_SIZE):
+        if hasattr(player, stat_name):
+            stat = getattr(player, stat_name)
+            font = pygame.font.Font(STATS_FONT, font_size)
+            rect = pygame.rect.Rect(stat_rect.left + rel_left, stat_rect.top + rel_top, rect_width, rect_height)
+            text = font.render(str(stat), False, 'white')
+            text_rect = text.get_rect(center=(rect.left + rect.width // 2, rect.top + rect.height // 2))
+            self.display_surface.blit(text, text_rect)
 
     def draw_current_weapon(self, weapon):
         rect = pygame.Rect(320, 10, 40, 40)

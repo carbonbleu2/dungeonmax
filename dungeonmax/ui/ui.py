@@ -136,3 +136,9 @@ class UI:
         font = pygame.font.Font(UI_FONT, UI_MESSAGE_FONT_SIZE)
         message_text = font.render(str(message), False, 'white')
         self.display_surface.blit(message_text, (10, SCREEN_HEIGHT - (UI_MESSAGE_BAR_HEIGHT - 5)))
+
+    def draw_religion_selection(self, gods):
+        rect = pygame.Rect(0, 0, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+        rect.center = self.display_surface.get_rect().center
+        pygame.draw.rect(self.display_surface, 'grey', rect)
+        

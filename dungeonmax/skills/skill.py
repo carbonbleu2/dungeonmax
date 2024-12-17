@@ -9,7 +9,7 @@ class Skill:
         self.image = pygame.image.load(image).convert_alpha()
         self.rect = self.image.get_rect()
         
-        self.skill_class = skill_class,
+        self.skill_class = skill_class
 
         self.codename = codename
 
@@ -24,8 +24,8 @@ class Skill:
 
     def on_cast(self, player):
         trog = GodsRepository.GODS["Trog"]
-        if trog.active and not trog.abandoned:
-            GodsRepository.GODS["Trog"].favour -= 2
+        if trog.active and not trog.abandoned and not self.skill_class == 'blood':
+            GodsRepository.GODS["Trog"].favour -= 3
 
     def update(self):
         if not self.can_be_used:

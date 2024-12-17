@@ -55,7 +55,7 @@ class ArcSwing(pygame.sprite.Sprite):
                 damage_pos = enemy.rect
                 enemy.health -= damage
                 if enemy.health <= 0:
-                    enemy.on_death(player)
+                    enemy.on_death(player, 'melee')
                 enemy.activate_invincibility()
 
         return damage, damage_pos

@@ -48,7 +48,7 @@ class ChomperFireballProjectile(ProjectileParticle):
             damage_pos = player.rect
             player.health -= damage
             if player.health <= 0:
-                player.on_death(player)
+                player.on_death(player, 'skill')
             player.deactivate_resting()
             self.kill()
 

@@ -23,6 +23,9 @@ def atoi(text):
 def natural_keys(text):
     return [atoi(c) for c in re.split(r'(\d+)', text) ]
 
+def distance(rect_1, rect_2):
+    return pygame.Vector2(rect_1.center).distance_to(rect_2.center)
+
 
 def main():
     pygame.init()
@@ -84,11 +87,14 @@ def main():
     ui = UI()
 
     ui_show_stats = False
+    ui_show_religion_selection = False
 
     intro_fade = ScreenFade(FadeType.WHOLE_SCREEN, NamedColour.BLACK.value, 10)
     gameover_fade = ScreenFade(FadeType.CURTAIN_FALL, NamedColour.RED.value, 10)
 
     restart_button = Button(SCREEN_WIDTH // 2 - 74, SCREEN_HEIGHT // 2 - 74, restart_button_image)
+
+    nearby_gods = set()
 
     while run:
         current_weapon = equipment_manager.get_weapon()
@@ -102,6 +108,8 @@ def main():
         screen.fill(BG_COLOUR)
 
         player = stage.player
+
+        god_tiles = stage.god_tiles
 
         if player.alive:
             dx, dy = 0, 0
@@ -185,6 +193,19 @@ def main():
         ui.draw_skill_tooltip(skill_rect, current_skill)
         ui.draw_buffs(player)
 
+        for god_tile in god_tiles:
+            if distance(player.rect, god_tile[1]) <= 2 * TILE_SIZE:
+                nearby_gods.add(god_tile[2])
+                if len(nearby_gods) > 0:
+                    
+                    god_descriptions = ", ".join([
+                        GodsRepository.GODS[g].altar_description for g in nearby_gods
+                    ])
+                    ui.draw_message_text("You see {}".format(god_descriptions))
+            else:
+                if god_tile[2] in nearby_gods:
+                    nearby_gods.remove(god_tile[2])
+
         if level_complete:
             if all_enemies_dead:
                 start_intro = True
@@ -215,7 +236,6 @@ def main():
                 temp_speed = player.speed
                 temp_coins = player.coins
                 temp_level = player.level
-
                 temp_health_regen_rate = player.health_regen_rate
                 temp_energy_regen_rate = player.energy_regen_rate
 
@@ -240,7 +260,6 @@ def main():
                 player.speed = temp_speed
                 player.coins = temp_coins
                 player.level = temp_level
-
                 player.health_regen_rate = temp_health_regen_rate
                 player.energy_regen_rate = temp_energy_regen_rate
 
@@ -290,9 +309,9 @@ def main():
                 if event.key == pygame.K_e:
                     equipment_manager.next_skill()     
                 if event.key == pygame.K_z:
-                    GodsRepository.GODS["Trog"].join_religion()      
-                if event.key == pygame.K_x:
-                    GodsRepository.GODS["Trog"].abandon_religion()     
+                    ui_show_religion_selection = not ui_show_religion_selection     
+                # if event.key == pygame.K_x:
+                #     GodsRepository.GODS["Trog"].abandon_religion()     
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_a:
                     moving_left = False
@@ -312,6 +331,9 @@ def main():
             
         if ui_show_stats:
             ui.draw_stats(player)
+
+        if ui_show_religion_selection:
+            ui.draw_religion_selection(nearby_gods)
 
         pygame.display.update()
 

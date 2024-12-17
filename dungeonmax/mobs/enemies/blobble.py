@@ -29,8 +29,8 @@ class Blobble(Character):
 
         self.attack_range = 5
 
-    def on_death(self, player):
-        super().on_death(player)
+    def on_death(self, player, damage_type):
+        super().on_death(player, damage_type)
 
     def ai(self, player, obstacles, scroll_x, scroll_y):
         super().ai(player, obstacles, scroll_x, scroll_y)

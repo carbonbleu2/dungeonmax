@@ -10,12 +10,13 @@ Followers of Trog will find that their melee attacks and magic defenses grow str
 However, deserters of Trog’s faith face severe punishment. Not only will Trog strip them of all skills he has granted, but he will also significantly weaken their melee attacks. To make matters worse, Trog will occasionally summon bloodthirsty monsters at random stages to hunt them down.
 
 ### Likes
-- Using melee attacks
-- Killing enemies with melee attacks
-- Using his granted abilities
+- Hitting enemies with melee attacks (+1 favour)
+- Killing enemies with melee attacks (+2 favour)
+- Using his granted abilities (+2 favour)
 ### Dislikes
-- Using any non-'blood' category skill
-- Using ranged attacks
+- Using any non-'blood' category skill (-3 favour)
+- Using ranged attacks (-1 favour)
+- Killing enemies with non-melee attacks (-1 favour)
 
 ### Favour Progression
 - On joining (Level 1): **Berserk** skill

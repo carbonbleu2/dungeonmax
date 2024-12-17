@@ -14,6 +14,9 @@ class Stage:
         self.player = None
         self.npc_list = []
         self.floor_tiles = []
+        self.god_tiles = []
+
+        self.floor_tile_id = None
 
     def process_tiles(self, data):
         self.length = len(data)
@@ -30,7 +33,8 @@ class Stage:
                     self.map_tiles.append(tile)
                     if col in FLOOR_TILE_IDS:
                         self.floor_tiles.append(tile)
-                    if col in WALL_TILE_IDS:
+                        self.floor_tile_id = col
+                    if col in WALL_TILE_IDS or col in GOD_TILE_IDS:
                         self.obstacle_tiles.append(tile)
                     if col in PORTAL_TILE_IDS:
                         self.portal_tile = tile
@@ -38,15 +42,18 @@ class Stage:
                     if col in TILE_TO_ITEM_CLASSES:
                         item_class = TILE_TO_ITEM_CLASSES[col]
                         self.item_list.append(item_class(image_x, image_y, AnimationRepository.ITEM_ANIMS))
-                        tile[0] = TileLoader.TILE_IMAGES[random.choice(FLOOR_TILE_IDS)]
+                        tile[0] = TileLoader.TILE_IMAGES[self.floor_tile_id]
                     if col == CharTiles.PLAYER:
                         self.player = Player(image_x, image_y, AnimationRepository.MOB_ANIMS)
-                        tile[0] = TileLoader.TILE_IMAGES[random.choice(FLOOR_TILE_IDS)]
+                        tile[0] = TileLoader.TILE_IMAGES[self.floor_tile_id]
                     elif col in TILE_TO_CHAR_CLASSES:
                         char_class = TILE_TO_CHAR_CLASSES[col]
                         character = char_class(image_x, image_y, AnimationRepository.MOB_ANIMS)
                         self.npc_list.append(character)
-                        tile[0] = TileLoader.TILE_IMAGES[random.choice(FLOOR_TILE_IDS)]
+                        tile[0] = TileLoader.TILE_IMAGES[self.floor_tile_id]
+                    elif col in GOD_TILE_IDS:
+                        self.god_tiles.append([col, image_rect, GOD_TILES_TO_GOD_NAMES[col]])
+                        tile[0] = TileLoader.TILE_IMAGES[self.floor_tile_id]
 
     def spawn_enemy(self, enemy_id):
         random_floor_tile = random.choice(self.floor_tiles)
@@ -66,6 +73,9 @@ class Stage:
     def draw(self, screen):
         for tile in self.map_tiles:
             screen.blit(tile[0], tile[1])
+
+        for god in self.god_tiles:
+            screen.blit(TileLoader.TILE_IMAGES[god[0]], god[1])
 
     def update(self, screen_scroll_x, screen_scroll_y):
         for tile in self.map_tiles:

@@ -155,7 +155,13 @@ class Character:
         self.rect.x += scroll_x
         self.rect.y += scroll_y
 
-    def on_death(self, player):
+    def on_death(self, player, damage_type):
         if player is None:
             return
         player.gain_xp(self.exp_gain)
+        if self.char_type != 'player':
+            from dungeonmax.gods.gods_enum import GodsRepository
+            if damage_type == 'melee':
+                GodsRepository.GODS["Trog"].favour += 2
+            else:
+                GodsRepository.GODS["Trog"].favour -= 1

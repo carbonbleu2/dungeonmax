@@ -1,13 +1,14 @@
 import pygame
 
 class God:
-    def __init__(self, name, altar_image, 
+    def __init__(self, name, altar_image, altar_description, 
                  level1_threshold, level2_threshold, 
                  level3_threshold, level4_threshold, 
                  level5_threshold,
                  favour=0):
         self.name = name
         self.altar_image = altar_image
+        self.altar_description = altar_description
         self.favour = favour
         self.abandoned = False
         self.active = False
@@ -74,5 +75,4 @@ class God:
         for threshold, perk in levels:
             if self.favour >= threshold:
                 perk(equipment_manager, enemies)
-
         

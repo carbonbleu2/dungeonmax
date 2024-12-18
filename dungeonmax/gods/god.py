@@ -1,3 +1,4 @@
+import os
 import pygame
 
 class God:
@@ -9,6 +10,7 @@ class God:
         self.name = name
         self.altar_image = altar_image
         self.altar_description = altar_description
+        self.starting_favour = favour
         self.favour = favour
         self.abandoned = False
         self.active = False
@@ -20,6 +22,22 @@ class God:
         self.level3_threshold = level3_threshold
         self.level4_threshold = level4_threshold
         self.level5_threshold = level5_threshold
+
+        self.full_description = self.read_full_description()
+
+    def reset(self):
+        self.favour = self.starting_favour
+        self.abandoned = False
+        self.active = False
+        self.player = None
+
+    def read_full_description(self):
+        text = None
+        with open(os.path.join('docs', 'gods', 'txt', f"{self.name}.txt"), 'r') as f:
+            text = f.read()
+
+        return text
+            
 
     def set_player(self, player):
         self.player = player
@@ -58,6 +76,7 @@ class God:
         pass
 
     def update(self, equipment_manager, enemies, stage, event=None):
+        print(self.favour)
         if self.abandoned:
             self.favour = 0
         if self.favour <= 0:

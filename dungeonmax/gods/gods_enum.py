@@ -3,14 +3,16 @@ from enum import Enum
 import pygame
 
 from dungeonmax.gods.god import God
+from dungeonmax.gods.god2 import God2
 from dungeonmax.gods.trog import Trog
 
 class GodsRepository:
     GODS = {
-        "Trog": Trog()
+        "Trog": Trog(),
+        "God2": God2()
     }
 
-    CANNOT_REJOIN = ["Trog"]
+    CANNOT_REJOIN = ["Trog", "God2"]
 
     def __init__(self):
         for god in self.GODS:

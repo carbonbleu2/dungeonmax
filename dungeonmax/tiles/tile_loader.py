@@ -14,7 +14,7 @@ from dungeonmax.tiles.god_tile_enum import GodTiles
 WALL_TILE_IDS = [WallTiles.STONE_BRICK_WALL1]
 PORTAL_TILE_IDS = [ExitTiles.STONE_EXIT1]
 FLOOR_TILE_IDS = [FloorTiles.STONE_FLOOR1]
-GOD_TILE_IDS = [GodTiles.TROG]
+GOD_TILE_IDS = [GodTiles.TROG, GodTiles.GOD2]
 
 TILE_TO_ITEM_CLASSES = {
     ItemTiles.COIN: Coin,
@@ -27,7 +27,8 @@ TILE_TO_CHAR_CLASSES = {
 }
 
 GOD_TILES_TO_GOD_NAMES = {
-    GodTiles.TROG: "Trog"
+    GodTiles.TROG: "Trog",
+    GodTiles.GOD2: "God2"
 }
 
 class TileLoader:
@@ -45,7 +46,8 @@ class TileLoader:
         CharTiles.BLOBBLE: "blobble.png",
         CharTiles.CHOMPER: "chomper.png",
 
-        GodTiles.TROG: "altar_trog.png"
+        GodTiles.TROG: "altar_trog.png",
+        GodTiles.GOD2: "altar_god2.png"
     }
 
     TILE_IMAGES = {-1: None}

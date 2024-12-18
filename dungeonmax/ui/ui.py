@@ -1,3 +1,4 @@
+import textwrap
 import pygame
 
 from dungeonmax.settings import *
@@ -9,6 +10,8 @@ class UI:
 
         self.health_bar = pygame.Rect(10, 10, BAR_WIDTH, BAR_HEIGHT)
         self.energy_bar = pygame.Rect(10, 35, BAR_WIDTH, BAR_HEIGHT)
+
+        self.god_to_select = None
 
     def show_bar(self, current_amount, max_amount, bg_rect, colour):
         pygame.draw.rect(self.display_surface, BAR_BG_COLOUR, bg_rect)
@@ -138,7 +141,58 @@ class UI:
         self.display_surface.blit(message_text, (10, SCREEN_HEIGHT - (UI_MESSAGE_BAR_HEIGHT - 5)))
 
     def draw_religion_selection(self, gods):
-        rect = pygame.Rect(0, 0, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+        from dungeonmax.gods.gods_enum import GodsRepository
+
+        rect = pygame.Rect(0, 0, SCREEN_WIDTH // 1.5, SCREEN_HEIGHT // 1.5)
         rect.center = self.display_surface.get_rect().center
         pygame.draw.rect(self.display_surface, 'grey', rect)
         
+        font = pygame.font.Font(UI_FONT, UI_MESSAGE_FONT_SIZE)
+        text_instruction = font.render(
+            UI_RELIGION_SELECT_INSTRUCTION_TEXT, False, 'black')
+        text_instruction_topleft = (rect.left + 10, rect.top + 2)
+        text_instruction_rect = text_instruction.get_rect(topleft=text_instruction_topleft)
+        self.display_surface.blit(text_instruction, text_instruction_rect)
+
+        if len(gods) == 0:
+            text_no_gods = font.render(UI_RELIGION_SELECT_NO_GODS_NEARBY, False, 'black')
+            text_no_gods_topleft = (rect.left + 10, rect.top + 50)
+            text_no_gods_rect = text_instruction.get_rect(topleft=text_no_gods_topleft)
+            self.display_surface.blit(text_no_gods, text_no_gods_rect)
+        else:
+            for i, god in enumerate(list(gods)):
+                god_selection_rect = pygame.Rect(rect.left + 10, rect.top + 70 + 50 * (i + 1), rect.width - 10, 50)
+                god_selection_rect.centerx = rect.centerx
+
+                god_details = GodsRepository.GODS[god]
+
+                god_image = god_details.altar_image
+                god_rect = god_image.get_rect(left=god_selection_rect.left + 20, centery=god_selection_rect.centery)
+                self.display_surface.blit(god_image, god_rect)
+
+                god_description = str(god_details.altar_description)
+                god_description_text = font.render(god_description, False, 'black')
+                god_description_rect = god_description_text.get_rect(
+                    left=god_rect.right + 20, centery=god_selection_rect.centery)
+                self.display_surface.blit(god_description_text, god_description_rect)
+
+                if god_selection_rect.collidepoint(pygame.mouse.get_pos()):
+                    pygame.draw.rect(self.display_surface, 'black', god_selection_rect, 2)
+                    if pygame.mouse.get_pressed()[0]:
+                        self.draw_text_box(god_details.full_description)
+                    self.god_to_select = god
+                else:
+                    self.god_to_select = None
+                    
+
+    def draw_text_box(self, text):
+        font = pygame.font.Font(UI_FONT, 12)
+        rect = pygame.Rect(0, 0, SCREEN_WIDTH // 1.3, SCREEN_HEIGHT // 1.3)
+        rect.center = self.display_surface.get_rect().center
+        text = "\n".join(textwrap.wrap(text, width=80, replace_whitespace=False, fix_sentence_endings=True))
+        pygame.draw.rect(self.display_surface, 'grey', rect)
+        text_surface = font.render(text, False, 'black')
+        text_instruction_topleft = (rect.left + 10, rect.top + 2)
+        text_instruction_rect = text_surface.get_rect(topleft=text_instruction_topleft)
+        self.display_surface.blit(text_surface, text_instruction_rect)
+                    

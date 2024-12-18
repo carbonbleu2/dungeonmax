@@ -10,7 +10,7 @@ class Trog(God):
     ALTAR_IMAGE = os.path.join('graphics', 'tiles', 'altar_trog.png')
     PROVIDED_SPELLS = ["Berserk", "Trog's Hand"]
     PROVIDED_WEAPONS = ["Bonecrusher"]
-    ALTAR_DESCRIPTION = "a bloody altar of Trog"
+    ALTAR_DESCRIPTION = "A bloody altar of Trog"
     
     def __init__(self):
         super().__init__(self.NAME, self.ALTAR_IMAGE, self.ALTAR_DESCRIPTION,
@@ -33,8 +33,8 @@ class Trog(God):
 
         if event == 'new_stage':
             # When entering a new stage, there is a 40% chance to 
-            # spawn a Trog's Knight or a Blood Wolf
-            if random.randrange(0, 100) < 100:
+            # spawn a Trog's Knight or a Blood Wolf (equally likely)
+            if random.randrange(0, 100) < 40:
                 stage.spawn_enemy(CharTiles.CHOMPER)
 
     def level1_perk(self, equipment_manager, enemies):

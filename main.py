@@ -26,7 +26,6 @@ def natural_keys(text):
 def distance(rect_1, rect_2):
     return pygame.Vector2(rect_1.center).distance_to(rect_2.center)
 
-
 def main():
     pygame.init()
 
@@ -96,6 +95,10 @@ def main():
 
     nearby_gods = set()
 
+    paused = False
+
+    current_god = None
+
     while run:
         current_weapon = equipment_manager.get_weapon()
         current_skill = equipment_manager.get_skill()
@@ -111,7 +114,11 @@ def main():
 
         god_tiles = stage.god_tiles
 
-        if player.alive:
+        if player.alive and not paused:
+            if current_god is not None:
+                if not current_god.active:
+                    current_god = None
+
             dx, dy = 0, 0
             if moving_up:
                 dy = -player.speed
@@ -140,8 +147,6 @@ def main():
             all_enemies_dead = all([not enemy.alive for enemy in enemies])
 
             player.update(None)
-
-            current_god = None
 
             for god in GodsRepository.GODS:
                 GodsRepository.GODS[god].set_player(player)
@@ -282,9 +287,13 @@ def main():
                     stage_num = 1
                     stage = reset_level()
                     stage.read_from_file(f"{stage_num}.csv")
-
                     player = stage.player
                     enemies = stage.npc_list
+
+                    current_god = None
+
+                    for god in GodsRepository.GODS:
+                        GodsRepository.GODS[god].reset()
 
                     for item in stage.item_list:
                         item_group.add(item)
@@ -304,14 +313,28 @@ def main():
                     moving_down = True
                 if event.key == pygame.K_TAB:
                     ui_show_stats = not ui_show_stats
+                    paused = ui_show_stats
                 if event.key == pygame.K_q:
                     equipment_manager.next_weapon()
                 if event.key == pygame.K_e:
                     equipment_manager.next_skill()     
                 if event.key == pygame.K_z:
-                    ui_show_religion_selection = not ui_show_religion_selection     
-                # if event.key == pygame.K_x:
-                #     GodsRepository.GODS["Trog"].abandon_religion()     
+                    ui_show_religion_selection = not ui_show_religion_selection   
+                    paused = ui_show_religion_selection
+                if event.key == pygame.K_f and ui.god_to_select:
+                    if current_god is not None and current_god.name != ui.god_to_select:
+                        GodsRepository.GODS[current_god.name].abandon_religion() 
+                    GodsRepository.GODS[ui.god_to_select].join_religion()
+                    paused = False
+                    ui_show_stats = False
+                    ui_show_religion_selection = False
+                if event.key == pygame.K_x:
+                    if current_god is not None:
+                        GodsRepository.GODS[current_god.name].abandon_religion() 
+                if event.key == pygame.K_ESCAPE:
+                    paused = False
+                    ui_show_stats = False
+                    ui_show_religion_selection = False   
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_a:
                     moving_left = False

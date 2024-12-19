@@ -24,7 +24,8 @@ class ChomperFireballProjectile(ProjectileParticle):
         y_dist = -(target_y - y)
         self.angle = math.degrees(math.atan2(y_dist, x_dist))
         super().__init__(self.GRAPHIC, x, y, self.angle, self.PROJECTILE_SPEED, 
-                         self.DAMAGE, self.on_hit, is_magic=True, range_=self.RANGE)
+                         self.DAMAGE, self.on_hit, is_magic=True, range_=self.RANGE,
+                         source='Chomper')
         
     def on_hit(self, player, enemy):
         pass
@@ -47,7 +48,7 @@ class ChomperFireballProjectile(ProjectileParticle):
             damage_pos = player.rect
             player.health -= damage
             if player.health <= 0:
-                player.on_death(player)
+                player.on_death(player, 'skill')
             player.deactivate_resting()
             self.kill()
 

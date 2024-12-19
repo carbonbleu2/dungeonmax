@@ -86,6 +86,9 @@ class Chomper(Character):
                     self.last_attack = pygame.time.get_ticks()
 
         return fireball
+    
+    def on_death(self, player, damage_type):
+        super().on_death(player, damage_type)
 
 
         

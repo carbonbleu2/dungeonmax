@@ -1,13 +1,15 @@
 import math
 import pygame
 
+from dungeonmax.gods.gods_enum import GodsRepository
+
 class Skill:
     def __init__(self, image, name, skill_class, codename, cooldown, cost, description):
         self.name = name
         self.image = pygame.image.load(image).convert_alpha()
         self.rect = self.image.get_rect()
         
-        self.skill_class = skill_class,
+        self.skill_class = skill_class
 
         self.codename = codename
 
@@ -21,7 +23,9 @@ class Skill:
         self.cost = cost
 
     def on_cast(self, player):
-        pass
+        trog = GodsRepository.GODS["Trog"]
+        if trog.active and not trog.abandoned and not self.skill_class == 'blood':
+            GodsRepository.GODS["Trog"].favour -= 3
 
     def update(self):
         if not self.can_be_used:

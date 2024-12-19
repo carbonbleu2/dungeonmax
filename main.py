@@ -3,6 +3,8 @@ import pygame
 
 from dungeonmax.animation_repository import AnimationRepository
 from dungeonmax.equipment_manager import EquipmentManager
+from dungeonmax.gods.gods_enum import GodsRepository
+from dungeonmax.gods.trog import Trog
 from dungeonmax.screenfade import FadeType, ScreenFade
 from dungeonmax.settings import *
 from dungeonmax.skills.flame.fireball import Fireball
@@ -21,6 +23,8 @@ def atoi(text):
 def natural_keys(text):
     return [atoi(c) for c in re.split(r'(\d+)', text) ]
 
+def distance(rect_1, rect_2):
+    return pygame.Vector2(rect_1.center).distance_to(rect_2.center)
 
 def main():
     pygame.init()
@@ -34,6 +38,7 @@ def main():
 
     _ = AnimationRepository()
     _ = TileLoader()
+    _ = GodsRepository()
 
     stage_num = 1
     stage = Stage()
@@ -45,7 +50,7 @@ def main():
     equipment_manager.add_weapon(RecruitsSword())
     equipment_manager.add_weapon(RecruitsBow())
 
-    equipment_manager.add_skill(Fireball())
+    # equipment_manager.add_skill(Fireball())
     equipment_manager.add_skill(WarriorsResolve())
 
     # weapon = RecruitsBow()
@@ -81,11 +86,18 @@ def main():
     ui = UI()
 
     ui_show_stats = False
+    ui_show_religion_selection = False
 
     intro_fade = ScreenFade(FadeType.WHOLE_SCREEN, NamedColour.BLACK.value, 10)
     gameover_fade = ScreenFade(FadeType.CURTAIN_FALL, NamedColour.RED.value, 10)
 
     restart_button = Button(SCREEN_WIDTH // 2 - 74, SCREEN_HEIGHT // 2 - 74, restart_button_image)
+
+    nearby_gods = set()
+
+    paused = False
+
+    current_god = None
 
     while run:
         current_weapon = equipment_manager.get_weapon()
@@ -94,14 +106,18 @@ def main():
         for skill in equipment_manager.skills:
             skill.update()
 
-
         clock.tick(FPS)
 
         screen.fill(BG_COLOUR)
 
         player = stage.player
 
-        if player.alive:
+        god_tiles = stage.god_tiles
+
+        if player.alive and not paused:
+            if current_god is not None:
+                if not current_god.active:
+                    current_god = None
 
             dx, dy = 0, 0
             if moving_up:
@@ -131,6 +147,13 @@ def main():
             all_enemies_dead = all([not enemy.alive for enemy in enemies])
 
             player.update(None)
+
+            for god in GodsRepository.GODS:
+                GodsRepository.GODS[god].set_player(player)
+                if GodsRepository.GODS[god].active:
+                    current_god = GodsRepository.GODS[god]
+                if GodsRepository.GODS[god].active or GodsRepository.GODS[god].abandoned:
+                    GodsRepository.GODS[god].update(equipment_manager, enemies, stage)
 
             particle = current_weapon.update(player)
             
@@ -167,11 +190,26 @@ def main():
 
         ui.draw_info(player, stage_num)
         ui.draw_message_box()
+
+        god_rect = ui.draw_current_god(current_god)
         weapon_rect = ui.draw_current_weapon(current_weapon)
         skill_rect = ui.draw_current_skill(current_skill)
         ui.draw_weapon_tooltip(weapon_rect, current_weapon)
         ui.draw_skill_tooltip(skill_rect, current_skill)
         ui.draw_buffs(player)
+
+        for god_tile in god_tiles:
+            if distance(player.rect, god_tile[1]) <= 2 * TILE_SIZE:
+                nearby_gods.add(god_tile[2])
+                if len(nearby_gods) > 0:
+                    
+                    god_descriptions = ", ".join([
+                        GodsRepository.GODS[g].altar_description for g in nearby_gods
+                    ])
+                    ui.draw_message_text("You see {}".format(god_descriptions))
+            else:
+                if god_tile[2] in nearby_gods:
+                    nearby_gods.remove(god_tile[2])
 
         if level_complete:
             if all_enemies_dead:
@@ -179,6 +217,11 @@ def main():
                 stage_num += 1
                 stage = reset_level()
                 stage.read_from_file(f"{stage_num}.csv")
+
+                for god in GodsRepository.GODS:
+                    GodsRepository.GODS[god].set_player(player)
+                    if GodsRepository.GODS[god].active or GodsRepository.GODS[god].abandoned:
+                        GodsRepository.GODS[god].update(equipment_manager, enemies, stage, event='new_stage')
 
                 temp_health = player.health
                 temp_energy = player.energy
@@ -198,7 +241,6 @@ def main():
                 temp_speed = player.speed
                 temp_coins = player.coins
                 temp_level = player.level
-
                 temp_health_regen_rate = player.health_regen_rate
                 temp_energy_regen_rate = player.energy_regen_rate
 
@@ -223,7 +265,6 @@ def main():
                 player.speed = temp_speed
                 player.coins = temp_coins
                 player.level = temp_level
-
                 player.health_regen_rate = temp_health_regen_rate
                 player.energy_regen_rate = temp_energy_regen_rate
 
@@ -246,9 +287,13 @@ def main():
                     stage_num = 1
                     stage = reset_level()
                     stage.read_from_file(f"{stage_num}.csv")
-
                     player = stage.player
                     enemies = stage.npc_list
+
+                    current_god = None
+
+                    for god in GodsRepository.GODS:
+                        GodsRepository.GODS[god].reset()
 
                     for item in stage.item_list:
                         item_group.add(item)
@@ -268,10 +313,28 @@ def main():
                     moving_down = True
                 if event.key == pygame.K_TAB:
                     ui_show_stats = not ui_show_stats
+                    paused = ui_show_stats
                 if event.key == pygame.K_q:
                     equipment_manager.next_weapon()
                 if event.key == pygame.K_e:
-                    equipment_manager.next_skill()                
+                    equipment_manager.next_skill()     
+                if event.key == pygame.K_z:
+                    ui_show_religion_selection = not ui_show_religion_selection   
+                    paused = ui_show_religion_selection
+                if event.key == pygame.K_f and ui.god_to_select:
+                    if current_god is not None and current_god.name != ui.god_to_select:
+                        GodsRepository.GODS[current_god.name].abandon_religion() 
+                    GodsRepository.GODS[ui.god_to_select].join_religion()
+                    paused = False
+                    ui_show_stats = False
+                    ui_show_religion_selection = False
+                if event.key == pygame.K_x:
+                    if current_god is not None:
+                        GodsRepository.GODS[current_god.name].abandon_religion() 
+                if event.key == pygame.K_ESCAPE:
+                    paused = False
+                    ui_show_stats = False
+                    ui_show_religion_selection = False   
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_a:
                     moving_left = False
@@ -291,6 +354,9 @@ def main():
             
         if ui_show_stats:
             ui.draw_stats(player)
+
+        if ui_show_religion_selection:
+            ui.draw_religion_selection(nearby_gods)
 
         pygame.display.update()
 

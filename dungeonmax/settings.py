@@ -42,7 +42,7 @@ UI_MESSAGE_BAR_HEIGHT = 30
 UI_MESSAGE_FONT_SIZE = 15
 
 UI_RELIGION_SELECT_INSTRUCTION_TEXT = '''
-Choose a god and press Z to join it's religion. 
+Choose a god and press F to join it's religion. 
 Hold left-click to see the god's details
 '''
 UI_RELIGION_SELECT_NO_GODS_NEARBY = '''

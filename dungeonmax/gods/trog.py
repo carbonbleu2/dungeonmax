@@ -14,7 +14,7 @@ class Trog(God):
     
     def __init__(self):
         super().__init__(self.NAME, self.ALTAR_IMAGE, self.ALTAR_DESCRIPTION,
-                         1, 2, 3, 4, 5)
+                         1, 2, 60, 80, 100)
 
     def punish(self, equipment_manager, enemies, stage, event=None):
         # Passively, slash melee attack by 75% by applying a debuff
@@ -42,7 +42,8 @@ class Trog(God):
         equipment_manager.add_skill(Berserk())
 
     def level2_perk(self, equipment_manager, enemies):
-        print("Level 2 perk")
+        from dungeonmax.skills.blood.trogs_hand import TrogsHand
+        equipment_manager.add_skill(TrogsHand())
 
     def level3_perk(self, equipment_manager, enemies):
         print("Level 3 perk")

@@ -25,3 +25,6 @@ class Buff:
 
     def wear_off(self):
         pass
+
+    def draw(self, screen):
+        pass

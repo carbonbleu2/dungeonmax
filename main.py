@@ -188,12 +188,16 @@ def main():
         item_group.draw(screen)
         damage_text_group.draw(screen)
 
+        for buff in player.buffs:
+            player.buffs[buff].draw(screen)
+
         ui.draw_info(player, stage_num)
         ui.draw_message_box()
 
         god_rect = ui.draw_current_god(current_god)
         weapon_rect = ui.draw_current_weapon(current_weapon)
         skill_rect = ui.draw_current_skill(current_skill)
+        ui.draw_god_tooltip(god_rect, current_god)
         ui.draw_weapon_tooltip(weapon_rect, current_weapon)
         ui.draw_skill_tooltip(skill_rect, current_skill)
         ui.draw_buffs(player)
@@ -243,6 +247,7 @@ def main():
                 temp_level = player.level
                 temp_health_regen_rate = player.health_regen_rate
                 temp_energy_regen_rate = player.energy_regen_rate
+                temp_buffs = player.buffs
 
                 player = stage.player
                 enemies = stage.npc_list
@@ -267,6 +272,10 @@ def main():
                 player.level = temp_level
                 player.health_regen_rate = temp_health_regen_rate
                 player.energy_regen_rate = temp_energy_regen_rate
+                
+                for buff in temp_buffs:
+                    player.buffs[buff] = temp_buffs[buff]
+                    player.buffs[buff].affected = player
 
                 for item in stage.item_list:
                     item_group.add(item)

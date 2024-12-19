@@ -121,11 +121,22 @@ class UI:
             pygame.draw.rect(self.display_surface, '#5e1916', tooltip)
             self.draw_text(skill.name, 'white', mouse_pos[0] + 10, mouse_pos[1] + 10)
             self.draw_message_text(skill.description)
+
+    def draw_god_tooltip(self, rect, god):
+        mouse_pos = pygame.mouse.get_pos()
+        if rect.collidepoint(mouse_pos):
+            if god is not None:
+                tooltip = pygame.Rect(mouse_pos[0], mouse_pos[1], 200, 50)
+                pygame.draw.rect(self.display_surface, '#5e1916', tooltip)
+                self.draw_text(god.name, 'white', mouse_pos[0] + 10, mouse_pos[1] + 10)
+                self.draw_message_text(f"You are a devotee of {god.name}")
+            else:
+                self.draw_message_text(f"You are not worshipping any gods")
         
     def draw_buffs(self, player):
         for i, (_, buff) in enumerate(player.buffs.items()):
             if buff.active:
-                rect = pygame.Rect(11 + 18 * i, 60, 18, 18)
+                rect = pygame.Rect(11 + 20 * i, 60, 20, 20)
                 buff_surface = buff.image
                 buff_rect = buff_surface.get_rect(center=rect.center)
                 if buff_rect.collidepoint(pygame.mouse.get_pos()):

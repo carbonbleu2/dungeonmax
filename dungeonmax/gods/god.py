@@ -76,7 +76,6 @@ class God:
         pass
 
     def update(self, equipment_manager, enemies, stage, event=None):
-        print(self.favour)
         if self.abandoned:
             self.favour = 0
         if self.favour <= 0:

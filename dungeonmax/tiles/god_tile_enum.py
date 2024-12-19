@@ -1,3 +1,3 @@
 class GodTiles:
     TROG = 160
-    GOD2 = 161
+    VEHLAAN = 161

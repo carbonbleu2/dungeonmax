@@ -5,12 +5,12 @@ from dungeonmax.buffs.trogs_curse import TrogsCurse
 from dungeonmax.gods.god import God
 from dungeonmax.tiles.char_tile_enum import CharTiles
 
-class God2(God):
-    NAME = 'God2'
-    ALTAR_IMAGE = os.path.join('graphics', 'tiles', 'altar_god2.png')
+class Vehlaan(God):
+    NAME = 'Vehlaan'
+    ALTAR_IMAGE = os.path.join('graphics', 'tiles', 'altar_vehlaan.png')
     PROVIDED_SPELLS = []
     PROVIDED_WEAPONS = []
-    ALTAR_DESCRIPTION = "A something altar of God2"
+    ALTAR_DESCRIPTION = "A crystal-bearing altar of Vehlaan"
     
     def __init__(self):
         super().__init__(self.NAME, self.ALTAR_IMAGE, self.ALTAR_DESCRIPTION,

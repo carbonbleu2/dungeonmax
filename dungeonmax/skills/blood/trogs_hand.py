@@ -14,7 +14,7 @@ class TrogsHand(Skill):
     
     BUFF_DURATION = 10
     HP_REGEN_INCREASE = 20
-    DESCRIPTION = "Gain (1 + Favour / 100) HP regeneration rate for 10 seconds."
+    DESCRIPTION = "Gain extra HP regeneration for 10 seconds."
 
     def __init__(self):
         super().__init__(

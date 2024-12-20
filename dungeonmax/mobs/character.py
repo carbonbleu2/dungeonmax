@@ -64,14 +64,14 @@ class Character:
             dx = dx * (math.sqrt(2) / 2)
             dy = dy * (math.sqrt(2) / 2)
 
-        self.rect.x += dx
+        self.rect.x += round(dx)
         for obstacle in obstacles:
             if obstacle[1].colliderect(self.rect):
                 if dx > 0:
                     self.rect.right = obstacle[1].left
                 elif dx < 0:
                     self.rect.left = obstacle[1].right
-        self.rect.y += dy
+        self.rect.y += round(dy)
         for obstacle in obstacles:
             if obstacle[1].colliderect(self.rect):
                 if dy > 0:

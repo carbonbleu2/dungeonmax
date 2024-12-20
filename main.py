@@ -29,7 +29,7 @@ def distance(rect_1, rect_2):
 def main():
     pygame.init()
 
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
     pygame.display.set_caption(TITLE)
 
     clock = pygame.time.Clock()

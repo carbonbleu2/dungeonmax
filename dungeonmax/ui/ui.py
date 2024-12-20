@@ -32,15 +32,15 @@ class UI:
         self.display_surface.blit(image, (x, y))
 
     def draw_info(self, player, stage_num):
-        pygame.draw.rect(self.display_surface, UI_INFO_PANEL_COLOUR, (0, 0, SCREEN_WIDTH, 100))
-        pygame.draw.line(self.display_surface, 'white', (0, 100), (SCREEN_WIDTH, 100))
+        pygame.draw.rect(self.display_surface, UI_INFO_PANEL_COLOUR, (0, 0, self.display_surface.width, 100))
+        pygame.draw.line(self.display_surface, 'white', (0, 100), (self.display_surface.width, 100))
         self.show_bar(player.health, player.max_hp, self.health_bar, HEALTH_BAR_COLOUR)
         self.show_bar(player.energy, player.max_ep, self.energy_bar, ENERGY_BAR_COLOUR)
 
-        self.draw_text(f"Coins: {player.coins}", 'white', SCREEN_WIDTH - 200, 10)
-        self.draw_text(f"Stage: {stage_num}", 'white', SCREEN_WIDTH - 200, 40)
-        self.draw_text(f"Level: {player.level}", 'white', SCREEN_WIDTH - 300, 10)
-        self.draw_text(f"XP to next level: {player.xp_to_next_level}", 'white', SCREEN_WIDTH - 200, 70)
+        self.draw_text(f"Coins: {player.coins}", 'white', self.display_surface.width - 200, 10)
+        self.draw_text(f"Stage: {stage_num}", 'white', self.display_surface.width - 200, 40)
+        self.draw_text(f"Level: {player.level}", 'white', self.display_surface.width - 300, 10)
+        self.draw_text(f"XP to next level: {player.xp_to_next_level}", 'white', self.display_surface.width - 200, 70)
 
     def draw_stats(self, player):
         image = pygame.image.load(STATS_SCREEN).convert_alpha()
@@ -144,17 +144,17 @@ class UI:
                 self.display_surface.blit(buff_surface, buff_rect)
 
     def draw_message_box(self):
-        pygame.draw.rect(self.display_surface, '#3d2328', (0, SCREEN_HEIGHT - UI_MESSAGE_BAR_HEIGHT, SCREEN_WIDTH, UI_MESSAGE_BAR_HEIGHT))
+        pygame.draw.rect(self.display_surface, '#3d2328', (0, self.display_surface.height - UI_MESSAGE_BAR_HEIGHT, self.display_surface.width, UI_MESSAGE_BAR_HEIGHT))
 
     def draw_message_text(self, message):
         font = pygame.font.Font(UI_FONT, UI_MESSAGE_FONT_SIZE)
         message_text = font.render(str(message), False, 'white')
-        self.display_surface.blit(message_text, (10, SCREEN_HEIGHT - (UI_MESSAGE_BAR_HEIGHT - 5)))
+        self.display_surface.blit(message_text, (10, self.display_surface.height - (UI_MESSAGE_BAR_HEIGHT - 5)))
 
     def draw_religion_selection(self, gods):
         from dungeonmax.gods.gods_enum import GodsRepository
 
-        rect = pygame.Rect(0, 0, SCREEN_WIDTH // 1.5, SCREEN_HEIGHT // 1.5)
+        rect = pygame.Rect(0, 0, self.display_surface.width // 1.5, self.display_surface.height // 1.5)
         rect.center = self.display_surface.get_rect().center
         pygame.draw.rect(self.display_surface, 'grey', rect)
         
@@ -198,7 +198,7 @@ class UI:
 
     def draw_text_box(self, text):
         font = pygame.font.Font(UI_FONT, 12)
-        rect = pygame.Rect(0, 0, SCREEN_WIDTH // 1.3, SCREEN_HEIGHT // 1.3)
+        rect = pygame.Rect(0, 0, self.display_surface.width // 1.3, self.display_surface.height // 1.3)
         rect.center = self.display_surface.get_rect().center
         text = "\n".join(textwrap.wrap(text, width=80, replace_whitespace=False, fix_sentence_endings=True))
         pygame.draw.rect(self.display_surface, 'grey', rect)

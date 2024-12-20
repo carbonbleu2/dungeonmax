@@ -30,12 +30,12 @@ class ChomperFireballProjectile(ProjectileParticle):
     def on_hit(self, player, enemy):
         pass
 
-    def update(self, enemies, player, obstacles, scroll_x, scroll_y):
+    def update(self, screen, enemies, player, obstacles, scroll_x, scroll_y):
         self.rect.x += self.dx + scroll_x
         self.rect.y += self.dy + scroll_y
 
-        if self.rect.right < 0 or self.rect.left > SCREEN_WIDTH \
-            or self.rect.bottom < 0 or self.rect.top > SCREEN_HEIGHT:
+        if self.rect.right < 0 or self.rect.left > screen.width \
+            or self.rect.bottom < 0 or self.rect.top > screen.height:
             self.kill()
 
         if pygame.math.Vector2(self.rect.center).distance_to(self.start_point) >= self.range:

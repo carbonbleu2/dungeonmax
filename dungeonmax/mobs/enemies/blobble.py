@@ -32,8 +32,8 @@ class Blobble(Character):
     def on_death(self, player, damage_type):
         super().on_death(player, damage_type)
 
-    def ai(self, player, obstacles, scroll_x, scroll_y):
-        super().ai(player, obstacles, scroll_x, scroll_y)
+    def ai(self, screen, player, obstacles, scroll_x, scroll_y):
+        super().ai(screen, player, obstacles, scroll_x, scroll_y)
         clipped_line = ()
 
         ai_dx = 0
@@ -57,7 +57,7 @@ class Blobble(Character):
                     ai_dy = self.speed
 
         if self.alive:
-            self.move(ai_dx, ai_dy, obstacles)
+            self.move(screen, ai_dx, ai_dy, obstacles)
             if dist < self.attack_range and not player.invincible and self.alive:
                 player.health -= max(1, self.melee_attack - player.melee_defense)
                 player.activate_invincibility()

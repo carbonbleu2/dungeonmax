@@ -22,7 +22,7 @@ class ArcSwing(pygame.sprite.Sprite):
         self.on_hit = on_hit
         self.source = 'Player'
         
-    def update(self, enemies, player, obstacles, scroll_x, scroll_y):
+    def update(self, screen, enemies, player, obstacles, scroll_x, scroll_y):
         self.rect.x += scroll_x
         self.rect.y += scroll_y
 

@@ -30,15 +30,15 @@ class ProjectileParticle(pygame.sprite.Sprite):
 
         self.source = source
         
-    def update(self, enemies, player, obstacles, scroll_x, scroll_y):
+    def update(self, screen, enemies, player, obstacles, scroll_x, scroll_y):
         damage = 0
         damage_pos = None
 
         self.rect.x += self.dx + scroll_x
         self.rect.y += self.dy + scroll_y
 
-        if self.rect.right < 0 or self.rect.left > SCREEN_WIDTH \
-            or self.rect.bottom < 0 or self.rect.top > SCREEN_HEIGHT:
+        if self.rect.right < 0 or self.rect.left > screen.width \
+            or self.rect.bottom < 0 or self.rect.top > screen.height:
             self.kill()
 
         for obstacle in obstacles:

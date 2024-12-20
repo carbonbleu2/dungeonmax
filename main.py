@@ -88,10 +88,10 @@ def main():
     ui_show_stats = False
     ui_show_religion_selection = False
 
-    intro_fade = ScreenFade(FadeType.WHOLE_SCREEN, NamedColour.BLACK.value, 10)
-    gameover_fade = ScreenFade(FadeType.CURTAIN_FALL, NamedColour.RED.value, 10)
+    intro_fade = ScreenFade(FadeType.WHOLE_SCREEN, NamedColour.BLACK.value, 20)
+    gameover_fade = ScreenFade(FadeType.CURTAIN_FALL, NamedColour.RED.value, 20)
 
-    restart_button = Button(SCREEN_WIDTH // 2 - 74, SCREEN_HEIGHT // 2 - 74, restart_button_image)
+    restart_button = Button(screen.width // 2 - 74, screen.height // 2 - 74, restart_button_image)
 
     nearby_gods = set()
 
@@ -129,7 +129,7 @@ def main():
             elif moving_right:
                 dx = player.speed
 
-            screen_scroll_x, screen_scroll_y, level_complete = player.move(dx, dy, stage.obstacle_tiles, stage.portal_tile)
+            screen_scroll_x, screen_scroll_y, level_complete = player.move(screen, dx, dy, stage.obstacle_tiles, stage.portal_tile)
 
             stage.update(screen_scroll_x, screen_scroll_y)
             item_group.update(player, screen_scroll_x, screen_scroll_y)
@@ -137,7 +137,7 @@ def main():
             enemies = stage.npc_list
 
             for enemy in enemies:
-                projectile = enemy.ai(player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
+                projectile = enemy.ai(screen, player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
                 
                 if projectile:
                     enemy_projeciles_group.add(projectile)
@@ -160,14 +160,14 @@ def main():
             if particle:
                 particles_group.add(particle)  
             for particle in particles_group:
-                damage, damage_pos = particle.update(enemies, player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
+                damage, damage_pos = particle.update(screen, enemies, player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
                 if damage > 0:
                     damage_text_group.add(
                         DamageText(damage_pos.centerx, damage_pos.y, damage, DAMAGE_TEXT_COLOUR)
                     )
 
             for enemy_projectile in enemy_projeciles_group:
-                enemy_projectile.update(enemies, player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
+                enemy_projectile.update(screen, enemies, player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
 
             damage_text_group.update(screen_scroll_x, screen_scroll_y)
 
@@ -306,7 +306,6 @@ def main():
 
                     for item in stage.item_list:
                         item_group.add(item)
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False

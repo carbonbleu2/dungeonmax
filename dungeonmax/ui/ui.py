@@ -164,7 +164,7 @@ class UI:
         text_instruction_topleft = (rect.left + 10, rect.top + 2)
         text_instruction_rect = text_instruction.get_rect(topleft=text_instruction_topleft)
         self.display_surface.blit(text_instruction, text_instruction_rect)
-
+        
         if len(gods) == 0:
             text_no_gods = font.render(UI_RELIGION_SELECT_NO_GODS_NEARBY, False, 'black')
             text_no_gods_topleft = (rect.left + 10, rect.top + 50)
@@ -192,8 +192,6 @@ class UI:
                     if pygame.mouse.get_pressed()[0]:
                         self.draw_text_box(god_details.full_description)
                     self.god_to_select = god
-                else:
-                    self.god_to_select = None
                     
 
     def draw_text_box(self, text):

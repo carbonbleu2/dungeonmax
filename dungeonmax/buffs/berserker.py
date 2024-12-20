@@ -4,7 +4,6 @@ import os
 import pygame
 from dungeonmax.buffs.buff import Buff
 from dungeonmax.colour import NamedColour
-from dungeonmax.settings import SCREEN_HEIGHT, SCREEN_WIDTH
 
 class Berserker(Buff):
     NAME = "Berserker"

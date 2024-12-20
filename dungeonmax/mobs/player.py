@@ -111,8 +111,8 @@ class Player(Character):
         self.resting = False
         self.resting_deactivate_timer = pygame.time.get_ticks()
 
-    def move(self, dx, dy, obstacles, exit_tile=None):
-        val = super().move(dx, dy, obstacles, exit_tile)
+    def move(self, screen, dx, dy, obstacles, exit_tile=None):
+        val = super().move(screen, dx, dy, obstacles, exit_tile)
         if dx != 0 or dy != 0:
             self.deactivate_resting()
         return val

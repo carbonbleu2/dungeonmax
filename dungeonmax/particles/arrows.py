@@ -4,7 +4,6 @@ import random
 import pygame
 
 from dungeonmax.particles.projectile_particle import ProjectileParticle
-from dungeonmax.settings import SCREEN_HEIGHT, SCREEN_WIDTH
 
 class Arrow(ProjectileParticle):
     def __init__(self, image, x, y, angle, proj_speed, damage, on_hit, range_):

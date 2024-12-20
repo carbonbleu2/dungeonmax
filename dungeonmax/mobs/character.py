@@ -2,7 +2,7 @@ import math
 
 import pygame
 
-from dungeonmax.settings import SCREEN_HEIGHT, SCREEN_WIDTH, SCROLL_THRESHOLD, TILE_SIZE
+from dungeonmax.settings import SCROLL_THRESHOLD, TILE_SIZE
 from dungeonmax.colour import NamedColour
 
 class Character:
@@ -44,7 +44,7 @@ class Character:
         surface.blit(flipped_image, self.rect)
         # pygame.draw.rect(surface, NamedColour.RED.value, self.rect, width=1)
 
-    def move(self, dx, dy, obstacles, exit_tile=None):
+    def move(self, screen, dx, dy, obstacles, exit_tile=None):
         screen_scroll_x = 0
         screen_scroll_y = 0
 
@@ -85,16 +85,16 @@ class Character:
                 if exit_distance < 20:
                     level_complete = True
 
-            if self.rect.right > (SCREEN_WIDTH - SCROLL_THRESHOLD):
-                screen_scroll_x = (SCREEN_WIDTH - SCROLL_THRESHOLD) - self.rect.right
-                self.rect.right = SCREEN_WIDTH - SCROLL_THRESHOLD
+            if self.rect.right > (screen.height - SCROLL_THRESHOLD):
+                screen_scroll_x = (screen.height - SCROLL_THRESHOLD) - self.rect.right
+                self.rect.right = screen.height - SCROLL_THRESHOLD
             if self.rect.left < SCROLL_THRESHOLD:
                 screen_scroll_x = SCROLL_THRESHOLD - self.rect.left
                 self.rect.left = SCROLL_THRESHOLD
 
-            if self.rect.bottom > (SCREEN_HEIGHT - SCROLL_THRESHOLD):
-                screen_scroll_y = (SCREEN_HEIGHT - SCROLL_THRESHOLD) - self.rect.bottom
-                self.rect.bottom = SCREEN_HEIGHT - SCROLL_THRESHOLD
+            if self.rect.bottom > (screen.height - SCROLL_THRESHOLD):
+                screen_scroll_y = (screen.height - SCROLL_THRESHOLD) - self.rect.bottom
+                self.rect.bottom = screen.height - SCROLL_THRESHOLD
             if self.rect.top < SCROLL_THRESHOLD:
                 screen_scroll_y = SCROLL_THRESHOLD - self.rect.top
                 self.rect.top = SCROLL_THRESHOLD
@@ -151,7 +151,7 @@ class Character:
         if buff.name in self.buffs:
             self.buffs[buff.name].active = False
 
-    def ai(self, player, obstacles, scroll_x, scroll_y):
+    def ai(self, screen, player, obstacles, scroll_x, scroll_y):
         self.rect.x += scroll_x
         self.rect.y += scroll_y
 

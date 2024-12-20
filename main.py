@@ -137,7 +137,7 @@ def main():
             enemies = stage.npc_list
 
             for enemy in enemies:
-                projectile = enemy.ai(screen, player, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
+                projectile = enemy.ai(screen, player, enemies, stage.obstacle_tiles, screen_scroll_x, screen_scroll_y)
                 
                 if projectile:
                     enemy_projeciles_group.add(projectile)

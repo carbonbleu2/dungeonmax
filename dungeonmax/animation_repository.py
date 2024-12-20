@@ -22,6 +22,7 @@ class AnimationRepository:
         "Chomper": {"idle": [], "run": []},
         "Player": {"idle": [], "run": []},
         "CaveBat": {"idle": [], "run": []},
+        "BloodWolf": {"idle": [], "run": []}
     }
         
     ITEM_ANIMS = {

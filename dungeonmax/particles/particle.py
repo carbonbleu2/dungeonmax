@@ -16,7 +16,7 @@ class AnimatedParticle(pygame.sprite.Sprite):
         self.duration = duration
         self.source = source
 
-    def update(self, enemies, player, *args, **kwargs):
+    def update(self, screen, enemies, player, *args, **kwargs):
         if self.stick_to_player:
             self.rect.center = player.rect.center
 

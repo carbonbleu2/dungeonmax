@@ -2,21 +2,19 @@ import pygame
 from dungeonmax.mobs.character import Character
 
 
-class CaveBat(Character):
+class BloodWolf(Character):
     def __init__(self, x, y, animations):
-        super().__init__(x, y, animations, 'CaveBat', 
+        super().__init__(x, y, animations, 'BloodWolf', 
                          char_type='enemy', exp_gain=5)
         
-        self.rect = self.rect.inflate(0, -10)
-
-        self.max_hp = 20
+        self.max_hp = 50
         self.max_ep = 0
-        self.melee_attack = 5
+        self.melee_attack = 10
         self.ranged_attack = 0
         self.special_attack = 0
-        self.melee_defense = 2
-        self.ranged_defense = 2
-        self.special_defense = 2
+        self.melee_defense = 5
+        self.ranged_defense = 5
+        self.special_defense = 5
 
         self.health = self.max_hp
         self.energy = self.max_ep
@@ -26,7 +24,7 @@ class CaveBat(Character):
         self.speed = 2
 
         self.maintain_distance = 2
-        self.notice_radius = 100
+        self.notice_radius = 300
 
         self.attack_range = 5
 
@@ -35,7 +33,7 @@ class CaveBat(Character):
     def on_death(self, player, damage_type):
         super().on_death(player, damage_type)
 
-    def ai(self, screen, player, enemies, obstacles, scroll_x, scroll_y):
+    def ai(self, screen, player, obstacles, scroll_x, scroll_y):
         super().ai(screen, player, obstacles, scroll_x, scroll_y)
         clipped_line = ()
 

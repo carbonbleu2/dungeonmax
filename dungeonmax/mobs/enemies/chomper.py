@@ -44,7 +44,7 @@ class Chomper(Character):
 
         self.last_attack = pygame.time.get_ticks()
     
-    def ai(self, screen, player, obstacles, scroll_x, scroll_y):
+    def ai(self, screen, player, enemies, obstacles, scroll_x, scroll_y):
         fireball_cooldown = self.FIREBALL_SHOOTING_RATE_TIME_RANGE / self.FIREBALL_SHOOTING_RATE
 
         super().ai(screen, player, obstacles, scroll_x, scroll_y)

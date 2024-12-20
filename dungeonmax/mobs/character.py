@@ -153,7 +153,7 @@ class Character:
         if buff.name in self.buffs:
             self.buffs[buff.name].active = False
 
-    def ai(self, screen, player, obstacles, scroll_x, scroll_y):
+    def ai(self, screen, player, enemies, obstacles, scroll_x, scroll_y):
         self.rect.x += scroll_x
         self.rect.y += scroll_y
 

@@ -24,7 +24,8 @@ TILE_TO_ITEM_CLASSES = {
 TILE_TO_CHAR_CLASSES = {
     CharTiles.BLOBBLE: Blobble,
     CharTiles.CHOMPER: Chomper,
-    CharTiles.CAVE_BAT: CaveBat
+    CharTiles.CAVE_BAT: CaveBat,
+    CharTiles.BLOOD_WOLF: BloodWolf
 }
 
 GOD_TILES_TO_GOD_NAMES = {
@@ -47,6 +48,7 @@ class TileLoader:
         CharTiles.BLOBBLE: "blobble.png",
         CharTiles.CHOMPER: "chomper.png",
         CharTiles.CAVE_BAT: "cave_bat.png",
+        CharTiles.BLOOD_WOLF: "blood_wolf.png",
 
         GodTiles.TROG: "altar_trog.png",
         GodTiles.VEHLAAN: "altar_vehlaan.png"

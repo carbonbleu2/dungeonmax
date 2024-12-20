@@ -35,6 +35,8 @@ class Character:
         self.invincibility_timer = 0
         self.invincibility_cooldown = 800
 
+        self.animation_cooldown = 140
+
         self.buffs = {}
 
         self.exp_gain = exp_gain
@@ -118,7 +120,7 @@ class Character:
         else:
             self.update_action('idle')
 
-        animation_cooldown = 140
+        animation_cooldown = self.animation_cooldown
         self.image = self.animations[self.name][self.action][self.frame_index]
 
         if pygame.time.get_ticks() - self.update_time > animation_cooldown:

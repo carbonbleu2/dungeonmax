@@ -16,19 +16,12 @@ class AnimationRepository:
         "WarriorsResolveParticle": "support"
     }
 
+    # Make each entry one line
     MOB_ANIMS = {
-        "Blobble": {
-            "idle": [],
-            "run": []
-        },
-        "Chomper": {
-            "idle": [],
-            "run": []
-        },
-        "Player": {
-            "idle": [],
-            "run": []
-        }
+        "Blobble": {"idle": [], "run": []},
+        "Chomper": {"idle": [], "run": []},
+        "Player": {"idle": [], "run": []},
+        "CaveBat": {"idle": [], "run": []},
     }
         
     ITEM_ANIMS = {

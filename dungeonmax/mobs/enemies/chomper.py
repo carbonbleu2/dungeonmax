@@ -1,3 +1,4 @@
+import math
 import pygame
 from dungeonmax.mobs.character import Character
 from dungeonmax.particles.skill.fireball import ChomperFireballProjectile, FireballProjectile
@@ -81,8 +82,13 @@ class Chomper(Character):
 
             if dist < self.FIREBALL_START_DISTANCE:
                 if pygame.time.get_ticks() - self.last_attack >= fireball_cooldown:
+                    current_x, current_y = player.rect.centerx, player.rect.centery
+                    x_dist = current_x - self.rect.centerx
+                    y_dist = -(current_y - self.rect.centery)
+                    angle = math.degrees(math.atan2(y_dist, x_dist))
                     fireball = ChomperFireballProjectile(self.rect.centerx, self.rect.centery, 
-                                                         player.rect.centerx, player.rect.centery)
+                                                         player.rect.centerx, player.rect.centery,
+                                                         angle)
                     self.last_attack = pygame.time.get_ticks()
 
         return fireball

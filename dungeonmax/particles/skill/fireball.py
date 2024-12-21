@@ -2,6 +2,7 @@ import math
 import os
 import random
 from dungeonmax.animation_repository import AnimationRepository
+from dungeonmax.buffs.burning import Burning
 from dungeonmax.particles.projectile_particle import ProjectileParticle
 from dungeonmax.settings import *
 
@@ -18,20 +19,22 @@ class ChomperFireballProjectile(ProjectileParticle):
     DAMAGE = 10
     RANGE = 16
 
-    def __init__(self, x, y, target_x, target_y):
-        x_dist = (target_x - x)
-        y_dist = -(target_y - y)
-        self.angle = math.degrees(math.atan2(y_dist, x_dist))
-        super().__init__(self.CODENAME, AnimationRepository.PROJECTILE_ANIMS, x, y, self.angle, self.PROJECTILE_SPEED, 
+    def __init__(self, x, y, target_x, target_y, angle):
+        super().__init__(self.CODENAME, AnimationRepository.PROJECTILE_ANIMS, x, y, angle, self.PROJECTILE_SPEED, 
                          self.DAMAGE, self.on_hit, is_magic=True, range_=self.RANGE,
                          source='Chomper')
         
     def on_hit(self, player, enemy):
-        pass
+        if random.randrange(0, 100) < 100:
+            burn = Burning(player, 5000)
+            player.add_buff(burn)
+            player.buffs[burn.name].active = True
 
     def update(self, screen, enemies, player, obstacles, scroll_x, scroll_y):
         self.rect.x += self.dx + scroll_x
         self.rect.y += self.dy + scroll_y
+
+        self.image = pygame.transform.rotate(self.animations[self.name][self.frame_index], self.angle - 90)
 
         if self.rect.right < 0 or self.rect.left > screen.width \
             or self.rect.bottom < 0 or self.rect.top > screen.height:

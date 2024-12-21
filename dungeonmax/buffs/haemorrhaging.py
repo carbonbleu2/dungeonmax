@@ -5,10 +5,10 @@ from dungeonmax.buffs.buff import Buff
 from dungeonmax.particles.skill.profuse_bleeding import ProfuseBleedingParticle
 from dungeonmax.ui.damage_text import DamageText
 
-class HaemorrhagingDebuff(Buff):
+class Haemorrhaging(Buff):
     NAME = "Haemorrhaging"
     IMAGE = os.path.join("graphics", "buffs", f"{NAME}.png")
-    DESCRIPTION = "Haemorrhaging: Bleeding profusely ({stacks} stacks) with reduced speed"
+    DESCRIPTION = "{name}: Bleeding profusely ({stacks} stacks) with reduced speed"
 
     TICK_DAMAGE = 2
 
@@ -24,14 +24,14 @@ class HaemorrhagingDebuff(Buff):
 
         self.original_speed = affected.speed
 
-        self.description = self.DESCRIPTION.format(stacks=self.stacks)
+        self.description = self.DESCRIPTION.format(name=self.NAME, stacks=self.stacks)
     
     def add_stack(self):
         if self.stacks < self.max_stacks:
             self.stacks += 1
         self.start = pygame.time.get_ticks()
         self.active = True
-        self.description = self.DESCRIPTION.format(stacks=self.stacks)
+        self.description = self.DESCRIPTION.format(name=self.NAME, stacks=self.stacks)
 
     def effect(self):
         current_time = pygame.time.get_ticks()
@@ -55,6 +55,7 @@ class HaemorrhagingDebuff(Buff):
             
     def wear_off(self):
         self.stacks = 0
-        self.particle.kill()
+        if self.particle is not None:
+            self.particle.kill()
         self.particle = None
         self.affected.speed = self.original_speed

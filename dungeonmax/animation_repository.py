@@ -11,12 +11,13 @@ def natural_keys(text):
 
 class AnimationRepository:
     PARTICLE_TYPES = {
-        "FireballProjectile": "fire",
+        "FireballProjectile": "flame",
         "WoodenArrow": "arrows",
         "WarriorsResolveParticle": "support",
-        "ChomperFireballProjectile": "fire",
+        "ChomperFireballProjectile": "flame",
         "HaemoblobProjectile": "blood",
-        "ProfuseBleedingParticle": "blood"
+        "ProfuseBleedingParticle": "blood",
+        "BurningParticle": "flame"
     }
 
     # Make each entry one line
@@ -36,7 +37,8 @@ class AnimationRepository:
 
     PARTICLE_ANIMS = {
         "WarriorsResolveParticle": [],
-        "ProfuseBleedingParticle": []
+        "ProfuseBleedingParticle": [],
+        "BurningParticle": []
     }
 
     PROJECTILE_ANIMS = {

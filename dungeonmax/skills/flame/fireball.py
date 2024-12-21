@@ -1,7 +1,9 @@
 import math
 import os
+import random
 
 import pygame
+from dungeonmax.buffs.burning import Burning
 from dungeonmax.particles.skill.fireball import FireballProjectile
 from dungeonmax.skills.skill import Skill
 
@@ -13,9 +15,12 @@ class Fireball(Skill):
     UI_GRAPHIC = os.path.join("graphics", "skills", SKILL_CATEGORY, f"{CODENAME}.png")
     COST = 5
     NAME = "Fireball"
+    DESCRIPTION = "Launch a fireball at the direction of your mouse cursor with \
+        a 30% chance to inflict a burn for 5 seconds"
+    
     PROJECTILE_SPEED = 5
     PROJECTILE_RANGE = 15
-    DESCRIPTION = "Launch a fireball at the direction of your mouse cursor"
+    BURN_DURATION = 5
 
     def __init__(self):
         super().__init__(
@@ -45,4 +50,8 @@ class Fireball(Skill):
         return fireball
 
     def on_hit(self, player, enemy):
-        return None
+        # 30% chance to add burning debuff
+        if random.randrange(0, 100) < 30:
+            burn = Burning(enemy, self.BURN_DURATION * 1000)
+            enemy.add_buff(burn)
+            enemy.buffs[burn.name].active = True

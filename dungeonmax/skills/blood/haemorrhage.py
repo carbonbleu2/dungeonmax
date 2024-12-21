@@ -2,7 +2,7 @@ import math
 import os
 import pygame
 
-from dungeonmax.buffs.haemorrhaging import HaemorrhagingDebuff
+from dungeonmax.buffs.haemorrhaging import Haemorrhaging
 from dungeonmax.particles.skill.haemoblob import HaemoblobProjectile
 from dungeonmax.skills.skill import Skill
 
@@ -14,15 +14,14 @@ class Haemorrhage(Skill):
     UI_GRAPHIC = os.path.join("graphics", "skills", SKILL_CATEGORY, f"{CODENAME}.png")
     COST = 8
     NAME = "Haemorrhage"
-    PROJECTILE_SPEED = 4
-    PROJECTILE_RANGE = 12
-    
-    STACK_LIMIT = 3
-    TICK_RATE = 1000
-
-    DEBUFF_DURATION = 10
     DESCRIPTION = "Throw a blob of blood to deal damage and inflict a stacking bleed that slows enemies and deals increasing damage over time"
 
+    PROJECTILE_SPEED = 4
+    PROJECTILE_RANGE = 12    
+    STACK_LIMIT = 3
+    TICK_RATE = 1000
+    DEBUFF_DURATION = 10
+    
     def __init__(self):
         super().__init__(
             self.UI_GRAPHIC, self.NAME, self.SKILL_CATEGORY,
@@ -63,7 +62,7 @@ class Haemorrhage(Skill):
             existing_hemorrhage.add_stack()
         else:
             # Create new hemorrhage debuff
-            new_hemorrhage = HaemorrhagingDebuff(
+            new_hemorrhage = Haemorrhaging(
                 enemy, self.DEBUFF_DURATION * 1000, self.TICK_RATE, 
                 max_stacks=self.STACK_LIMIT
             )

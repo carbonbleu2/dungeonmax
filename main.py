@@ -2,7 +2,7 @@ import re
 import pygame
 
 from dungeonmax.animation_repository import AnimationRepository
-from dungeonmax.buffs.haemorrhaging import HaemorrhagingDebuff
+from dungeonmax.buffs.haemorrhaging import Haemorrhaging
 from dungeonmax.equipment_manager import EquipmentManager
 from dungeonmax.gods.gods_enum import GodsRepository
 from dungeonmax.gods.trog import Trog

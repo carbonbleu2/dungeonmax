@@ -5,12 +5,12 @@ from dungeonmax.colour import NamedColour
 
 pygame.init()
 
-TITLE = "DungeonMax v0.0.2alpha"
+TITLE = "DungeonMax v0.0.1alpha"
 
 TILE_SIZE = 32
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1900
+SCREEN_HEIGHT = 1000
 
 BG_COLOUR = '#141414'
 

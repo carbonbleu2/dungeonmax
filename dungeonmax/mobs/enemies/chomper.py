@@ -47,7 +47,7 @@ class Chomper(Character):
     def ai(self, screen, player, enemies, obstacles, scroll_x, scroll_y):
         fireball_cooldown = self.FIREBALL_SHOOTING_RATE_TIME_RANGE / self.FIREBALL_SHOOTING_RATE
 
-        super().ai(screen, player, obstacles, scroll_x, scroll_y)
+        super().ai(screen, player, enemies, obstacles, scroll_x, scroll_y)
 
         clipped_line = ()
         fireball = None

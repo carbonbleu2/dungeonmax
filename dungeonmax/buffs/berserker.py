@@ -37,6 +37,8 @@ class Berserker(Buff):
         self.affected.ranged_defense = math.ceil(self.original_ranged_defense * self.DEFENSE_MULTIPLIER)
         self.affected.special_defense = math.ceil(self.original_special_defense * self.DEFENSE_MULTIPLIER)
 
+        return 0, None
+
     def wear_off(self):
         self.affected.melee_attack = self.original_attack
         self.affected.melee_defense = self.original_melee_defense

@@ -16,5 +16,7 @@ class MeleeDefenseBoost(Buff):
     def effect(self):
         self.affected.melee_defense = math.ceil(self.original_defense + self.boost_amount)
 
+        return 0, None
+
     def wear_off(self):
         self.affected.melee_defense = self.original_defense

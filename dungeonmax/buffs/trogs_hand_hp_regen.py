@@ -15,6 +15,7 @@ class TrogsHandHPRegen(Buff):
         increase = (1 + favour / 100) / 60
         self.affected.health = min(self.affected.health + increase, self.affected.max_hp)
         self.description = self.DESCRIPTION.format(new_hp_gen=round(increase, 3), duration=self.duration / 1000)
+        return 0, None
 
     def wear_off(self):
         super().wear_off()

@@ -10,6 +10,7 @@ class Buff:
         self.start = pygame.time.get_ticks()
         self.active = False
         self.description = description
+        self.particle = None
 
     def update(self):
         if self.duration == -1:
@@ -21,10 +22,16 @@ class Buff:
                 self.active = False
 
     def effect(self):
-        pass
+        # Damage
+        # Hitbox of affected
+        # Particle effect
+        return 0, None
 
     def wear_off(self):
         pass
 
     def draw(self, screen):
         pass
+
+    def __str__(self):
+        return self.description

@@ -13,7 +13,10 @@ class AnimationRepository:
     PARTICLE_TYPES = {
         "FireballProjectile": "fire",
         "WoodenArrow": "arrows",
-        "WarriorsResolveParticle": "support"
+        "WarriorsResolveParticle": "support",
+        "ChomperFireballProjectile": "fire",
+        "HaemoblobProjectile": "blood",
+        "ProfuseBleedingParticle": "blood"
     }
 
     # Make each entry one line
@@ -32,7 +35,15 @@ class AnimationRepository:
     }   
 
     PARTICLE_ANIMS = {
-        "WarriorsResolveParticle": []
+        "WarriorsResolveParticle": [],
+        "ProfuseBleedingParticle": []
+    }
+
+    PROJECTILE_ANIMS = {
+        "FireballProjectile": [],
+        "WoodenArrow": [],
+        "ChomperFireballProjectile": [],
+        "HaemoblobProjectile": []
     }
 
     def __init__(self):
@@ -63,3 +74,11 @@ class AnimationRepository:
                 image_path = os.path.join('graphics', 'particles', self.PARTICLE_TYPES[particle], particle, image)
                 image_surface = pygame.image.load(image_path).convert_alpha()
                 self.PARTICLE_ANIMS[particle].append(image_surface)
+
+        for projectile in self.PROJECTILE_ANIMS:
+            image_files = os.listdir(os.path.join('graphics', 'particles', self.PARTICLE_TYPES[projectile], projectile))
+            image_files = sorted(image_files, key=natural_keys)
+            for image in image_files:
+                image_path = os.path.join('graphics', 'particles', self.PARTICLE_TYPES[projectile], projectile, image)
+                image_surface = pygame.image.load(image_path).convert_alpha()
+                self.PROJECTILE_ANIMS[projectile].append(image_surface)

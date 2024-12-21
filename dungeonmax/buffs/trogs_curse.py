@@ -17,6 +17,7 @@ class TrogsCurse(Buff):
     def effect(self):
         self.affected.melee_attack = math.ceil(self.original_melee_attack - 
                                     (self.MELEE_ATTACK_DIP_PERCENTAGE / 100) * self.original_melee_attack)
+        return 0, None
 
     def wear_off(self):
         self.affected.melee_attack = self.original_melee_attack

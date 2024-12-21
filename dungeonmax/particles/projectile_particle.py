@@ -6,14 +6,15 @@ from dungeonmax.settings import *
 
 
 class ProjectileParticle(pygame.sprite.Sprite):
-    def __init__(self, image, x, y, angle, proj_speed, damage, 
+    def __init__(self, name, animations, x, y, angle, proj_speed, damage, 
                  on_hit, is_magic=False, range_=15,
                  source='Player'):
         pygame.sprite.Sprite.__init__(self)
-        
-        self.original_image = pygame.image.load(image).convert_alpha()
+        self.name = name
+        self.animations = animations
+        self.frame_index = 0
         self.angle = angle
-        self.image = pygame.transform.rotate(self.original_image, self.angle - 90)
+        self.image = self.animations[self.name][self.frame_index]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
         self.speed = proj_speed
@@ -29,6 +30,8 @@ class ProjectileParticle(pygame.sprite.Sprite):
         self.start_point = x, y
 
         self.source = source
+
+        self.update_time = pygame.time.get_ticks()
         
     def update(self, screen, enemies, player, obstacles, scroll_x, scroll_y):
         damage = 0
@@ -36,6 +39,15 @@ class ProjectileParticle(pygame.sprite.Sprite):
 
         self.rect.x += self.dx + scroll_x
         self.rect.y += self.dy + scroll_y
+
+        animation_cooldown = 100
+        self.image = pygame.transform.rotate(self.animations[self.name][self.frame_index], self.angle - 90)
+
+        if pygame.time.get_ticks() - self.update_time > animation_cooldown:
+            self.frame_index += 1
+            if self.frame_index >= len(self.animations[self.name]):
+                self.frame_index = 0
+            self.update_time = pygame.time.get_ticks()
 
         if self.rect.right < 0 or self.rect.left > screen.width \
             or self.rect.bottom < 0 or self.rect.top > screen.height:

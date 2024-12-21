@@ -45,4 +45,4 @@ class Fireball(Skill):
         return fireball
 
     def on_hit(self, player, enemy):
-        pass
+        return None

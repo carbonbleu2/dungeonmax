@@ -22,6 +22,8 @@ class Resting(Buff):
         self.affected.energy += self.affected.energy_regen_rate
         if self.affected.energy >= self.affected.max_ep:
             self.affected.energy = self.affected.max_ep
+        
+        return 0, None
 
     def wear_off(self):
         pass

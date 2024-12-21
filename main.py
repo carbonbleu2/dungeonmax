@@ -2,11 +2,13 @@ import re
 import pygame
 
 from dungeonmax.animation_repository import AnimationRepository
+from dungeonmax.buffs.haemorrhaging import HaemorrhagingDebuff
 from dungeonmax.equipment_manager import EquipmentManager
 from dungeonmax.gods.gods_enum import GodsRepository
 from dungeonmax.gods.trog import Trog
 from dungeonmax.screenfade import FadeType, ScreenFade
 from dungeonmax.settings import *
+from dungeonmax.skills.blood.haemorrhage import Haemorrhage
 from dungeonmax.skills.flame.fireball import Fireball
 from dungeonmax.skills.warrior.warriors_resolve import WarriorsResolve
 from dungeonmax.tiles.stage import Stage
@@ -50,7 +52,8 @@ def main():
     equipment_manager.add_weapon(RecruitsSword())
     equipment_manager.add_weapon(RecruitsBow())
 
-    # equipment_manager.add_skill(Fireball())
+    equipment_manager.add_skill(Haemorrhage())
+    equipment_manager.add_skill(Fireball())
     equipment_manager.add_skill(WarriorsResolve())
 
     # weapon = RecruitsBow()
@@ -142,11 +145,30 @@ def main():
                 if projectile:
                     enemy_projeciles_group.add(projectile)
                 
-                enemy.update(player)
+                if enemy.alive:
+                    details = enemy.update(player)
+                    if "BuffDamages" in details:
+                        for buff_name, buff_damage in details["BuffDamages"].items():
+                            if buff_damage[0] > 0:
+                                damage_text_group.add(
+                                    DamageText(enemy.rect.centerx, enemy.rect.y, buff_damage[0], DAMAGE_TEXT_COLOUR)
+                                )
+                            particle = enemy.buffs[buff_name].particle
+                            if particle is not None:
+                                particles_group.add(particle)
 
             all_enemies_dead = all([not enemy.alive for enemy in enemies])
 
-            player.update(None)
+            player_details = player.update(None)
+            if "BuffDamages" in player_details:
+                for buff, buff_damage in player_details["BuffDamages"].items():
+                    if buff_damage[0] > 0:
+                        damage_text_group.add(
+                            DamageText(player.rect.centerx, player.rect.y, buff_damage[0], DAMAGE_TEXT_COLOUR)
+                        )
+                    particle = player.buffs[buff].particle
+                    if particle is not None:
+                        particles_group.add(particle)
 
             for god in GodsRepository.GODS:
                 GodsRepository.GODS[god].set_player(player)

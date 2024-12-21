@@ -117,9 +117,10 @@ class UI:
     def draw_skill_tooltip(self, rect, skill):
         mouse_pos = pygame.mouse.get_pos()
         if rect.collidepoint(mouse_pos):
-            tooltip = pygame.Rect(mouse_pos[0], mouse_pos[1], 200, 50)
+            tooltip = pygame.Rect(mouse_pos[0], mouse_pos[1], 200, 100)
             pygame.draw.rect(self.display_surface, '#5e1916', tooltip)
-            self.draw_text(skill.name, 'white', mouse_pos[0] + 10, mouse_pos[1] + 10)
+            skill_text = f"{skill.name}\nCost: {skill.cost}\nCooldown: {skill.cooldown}"
+            self.draw_text(skill_text, 'white', mouse_pos[0] + 10, mouse_pos[1] + 10)
             self.draw_message_text(skill.description)
 
     def draw_god_tooltip(self, rect, god):

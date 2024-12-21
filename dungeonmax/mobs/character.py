@@ -104,16 +104,19 @@ class Character:
         return screen_scroll_x, screen_scroll_y, level_complete
 
     def update(self, player):
+        buff_damages = {}
+
         if self.health <= 0:
             self.health = 0
             self.alive = False
+
         for buff_name, buff in list(self.buffs.items()):
             if not buff.active:
                 buff.wear_off()
                 del self.buffs[buff_name]
             else:
                 buff.update()
-                buff.effect()
+                buff_damages[buff_name] = buff.effect()
 
         if self.running:
             self.update_action('run')
@@ -131,6 +134,10 @@ class Character:
 
         if self.invincible and pygame.time.get_ticks() - self.invincibility_timer > self.invincibility_cooldown:
             self.invincible = False
+
+        return {
+            "BuffDamages": buff_damages
+        }
             
     def update_action(self, new_action):
         if new_action != self.action:

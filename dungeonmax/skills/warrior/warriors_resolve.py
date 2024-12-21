@@ -38,7 +38,7 @@ class WarriorsResolve(Skill):
             buff = MeleeDefenseBoost(player, self.EFFECT_DURATION, boost)
             buff.active = True
             player.add_buff(buff)
-            particle = WarriorsResolveParticle(player.rect.centerx, player.rect.centery, duration=self.EFFECT_DURATION)
+            particle = WarriorsResolveParticle(player.rect.centerx, player.rect.centery, player, duration=self.EFFECT_DURATION)
 
         return particle
 

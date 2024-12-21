@@ -94,7 +94,7 @@ class Player(Character):
         return 'left'
     
     def update(self, player):
-        super().update(player)
+        details = super().update(player)
         buff = Resting(self)
         if self.resting:
             if buff.name not in self.buffs:
@@ -106,6 +106,8 @@ class Player(Character):
 
         if not self.resting and pygame.time.get_ticks() - self.resting_deactivate_timer > self.resting_cooldown:
             self.resting = True
+
+        return details
 
     def deactivate_resting(self):
         self.resting = False

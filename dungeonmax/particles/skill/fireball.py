@@ -1,20 +1,19 @@
 import math
 import os
 import random
+from dungeonmax.animation_repository import AnimationRepository
 from dungeonmax.particles.projectile_particle import ProjectileParticle
 from dungeonmax.settings import *
 
 class FireballProjectile(ProjectileParticle):
     CODENAME = "FireballProjectile"
-    GRAPHIC = os.path.join('graphics', 'particles', 'fire', f"{CODENAME}.png")
-
+    
     def __init__(self, x, y, angle, proj_speed, damage, on_hit, range_):
-        super().__init__(self.GRAPHIC, x, y, angle, proj_speed, 
+        super().__init__(self.CODENAME, AnimationRepository.PROJECTILE_ANIMS, x, y, angle, proj_speed, 
                          damage, on_hit, is_magic=True, range_=range_)
         
 class ChomperFireballProjectile(ProjectileParticle):
     CODENAME = "ChomperFireballProjectile"
-    GRAPHIC = os.path.join('graphics', 'particles', 'fire', "FireballProjectile.png")
     PROJECTILE_SPEED = 8
     DAMAGE = 10
     RANGE = 16
@@ -23,7 +22,7 @@ class ChomperFireballProjectile(ProjectileParticle):
         x_dist = (target_x - x)
         y_dist = -(target_y - y)
         self.angle = math.degrees(math.atan2(y_dist, x_dist))
-        super().__init__(self.GRAPHIC, x, y, self.angle, self.PROJECTILE_SPEED, 
+        super().__init__(self.CODENAME, AnimationRepository.PROJECTILE_ANIMS, x, y, self.angle, self.PROJECTILE_SPEED, 
                          self.DAMAGE, self.on_hit, is_magic=True, range_=self.RANGE,
                          source='Chomper')
         

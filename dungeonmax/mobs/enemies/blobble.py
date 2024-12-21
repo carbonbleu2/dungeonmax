@@ -33,7 +33,7 @@ class Blobble(Character):
         super().on_death(player, damage_type)
 
     def ai(self, screen, player, enemies, obstacles, scroll_x, scroll_y):
-        super().ai(screen, player, obstacles, scroll_x, scroll_y)
+        super().ai(screen, player, enemies, obstacles, scroll_x, scroll_y)
         clipped_line = ()
 
         ai_dx = 0

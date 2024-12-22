@@ -71,7 +71,7 @@ class RecruitsSword(Sword):
 
     DAMAGE = 5
     ATTACK_SPEED = 4
-    SWING_SPEED = 6
+    SWING_SPEED = 20
 
     SCALE_FACTOR = 1.2
 

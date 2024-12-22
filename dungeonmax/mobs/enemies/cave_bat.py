@@ -23,9 +23,9 @@ class CaveBat(Character):
 
         self.invincibility_cooldown = 1000
         
-        self.speed = 2
+        self.speed = 2.5
 
-        self.maintain_distance = 2
+        self.maintain_distance = 5
         self.notice_radius = 100
 
         self.attack_range = 5

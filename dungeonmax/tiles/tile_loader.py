@@ -18,7 +18,8 @@ GOD_TILE_IDS = [GodTiles.TROG, GodTiles.VEHLAAN]
 
 TILE_TO_ITEM_CLASSES = {
     ItemTiles.COIN: Coin,
-    ItemTiles.HEALTH_POTION: HealthPotion
+    ItemTiles.HEALTH_POTION: HealthPotion,
+    ItemTiles.SPELLBOOK_OF_BLOOD: SpellBookOfBlood
 }    
 
 TILE_TO_CHAR_CLASSES = {
@@ -43,6 +44,7 @@ class TileLoader:
         
         ItemTiles.COIN: "coin.png",
         ItemTiles.HEALTH_POTION: "healthpotion.png",
+        ItemTiles.SPELLBOOK_OF_BLOOD: "spellbook_of_blood.png",
 
         CharTiles.PLAYER: "player.png",
         CharTiles.BLOBBLE: "blobble.png",

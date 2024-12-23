@@ -9,8 +9,8 @@ TITLE = "DungeonMax v0.0.1alpha"
 
 TILE_SIZE = 32
 
-SCREEN_WIDTH = 1900
-SCREEN_HEIGHT = 1000
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
 
 BG_COLOUR = '#141414'
 
@@ -49,7 +49,16 @@ UI_RELIGION_SELECT_NO_GODS_NEARBY = '''
 There are no god altars nearby
 '''
 
-SCROLL_THRESHOLD = 300
+UI_SPELL_SELECT_INSTRUCTION_TEXT = '''
+Choose a spell and press F to learn it.
+Hold left-click to see the spell's details
+'''
+
+UI_SPELL_SELECT_NO_SPELLS = '''
+There are no spells in this book. Weird...
+'''
+
+SCROLL_THRESHOLD = 200
 
 STATS_SCREEN = os.path.join("graphics", "ui", "statscreen.png")
 

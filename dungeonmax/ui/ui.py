@@ -12,6 +12,11 @@ class UI:
         self.energy_bar = pygame.Rect(10, 35, BAR_WIDTH, BAR_HEIGHT)
 
         self.god_to_select = None
+        self.item_to_select = None
+
+        self.spell_to_select = None
+        self.show_spellbook = False
+        self.chosen_spellbook = None
 
     def show_bar(self, current_amount, max_amount, bg_rect, colour):
         pygame.draw.rect(self.display_surface, BAR_BG_COLOUR, bg_rect)
@@ -212,5 +217,84 @@ class UI:
         text_fps_surface = (self.display_surface.width - 50, self.display_surface.height - 50)
         text_fps_rect = text_fps.get_rect(center=text_fps_surface)
         self.display_surface.blit(text_fps, text_fps_rect)
+
+    def draw_inventory(self, inventory):
+        rect = pygame.Rect(0, 0, self.display_surface.width // 1.5, self.display_surface.height // 1.5)
+        rect.center = self.display_surface.get_rect().center
+        pygame.draw.rect(self.display_surface, 'grey', rect)
+
+        inventory_item_names = inventory.get_item_names()
+        item_index = 0
+
+        item_count_font = pygame.font.Font(UI_FONT, 8)
+
+        for i in range(0, 10):
+            for j in range(0, 7):
+                if item_index < len(inventory_item_names):
+                    item_name = inventory_item_names[item_index]
+                    item = inventory.item_instances[item_name]
+                    
+                    item_surface = item.image
+                    item_rect = item_surface.get_rect(left=rect.left + 10 + 50 * i, top=rect.top + 10 + 50 * j)
+                    self.display_surface.blit(item_surface, item_rect)
+                    
+                    border_rect = pygame.Rect(0, 0, 40, 40)
+                    border_rect.center = item_rect.center
+
+                    item_count = inventory.items[item_name]
+                    count_text = item_count_font.render(str(item_count), False, 'black')
+                    count_rect = count_text.get_rect(right=border_rect.right - 2, top=border_rect.top + 2)
+                    self.display_surface.blit(count_text, count_rect)
+                    
+                    if item_rect.collidepoint(pygame.mouse.get_pos()):
+                        pygame.draw.rect(self.display_surface, 'black', border_rect, 2)
+                        self.draw_message_text(item.description)
+                        self.item_to_select = item_name
+                    else:
+                        self.item_to_select = None
+                    item_index += 1
+
+    def draw_spellbook(self):
+        if self.chosen_spellbook is None and self.show_spellbook:
+            return
+        
+        spellbook = self.chosen_spellbook
+
+        rect = pygame.Rect(0, 0, self.display_surface.width // 1.5, self.display_surface.height // 1.5)
+        rect.center = self.display_surface.get_rect().center
+        pygame.draw.rect(self.display_surface, 'grey', rect)
+
+        font = pygame.font.Font(UI_FONT, UI_MESSAGE_FONT_SIZE)
+        text_instruction = font.render(
+            UI_SPELL_SELECT_INSTRUCTION_TEXT, False, 'black')
+        text_instruction_topleft = (rect.left + 10, rect.top + 2)
+        text_instruction_rect = text_instruction.get_rect(topleft=text_instruction_topleft)
+        self.display_surface.blit(text_instruction, text_instruction_rect)
+
+        if len(spellbook.spells) == 0:
+            text_no_spells = font.render(UI_SPELL_SELECT_NO_SPELLS, False, 'black')
+            text_no_spells_topleft = (rect.left + 10, rect.top + 50)
+            text_no_spells_rect = text_instruction.get_rect(topleft=text_no_spells_topleft)
+            self.display_surface.blit(text_no_spells, text_no_spells_rect)
+        else:
+            for i, spell in enumerate(spellbook.spells):
+                spell_selection_rect = pygame.Rect(rect.left + 10, rect.top + 70 + 50 * (i + 1), rect.width - 10, 50)
+                spell_selection_rect.centerx = rect.centerx
+
+                spell_image = spell.image
+                spell_rect = spell_image.get_rect(left=spell_selection_rect.left + 20, centery=spell_selection_rect.centery)
+                self.display_surface.blit(spell_image, spell_rect)
+
+                spell_name = str(spell.name)
+                spell_name_text = font.render(spell_name, False, 'black')
+                spell_name_rect = spell_name_text.get_rect(
+                    left=spell_rect.right + 20, centery=spell_selection_rect.centery)
+                self.display_surface.blit(spell_name_text, spell_name_rect)
+
+                if spell_selection_rect.collidepoint(pygame.mouse.get_pos()):
+                    pygame.draw.rect(self.display_surface, 'black', spell_selection_rect, 2)
+                    if pygame.mouse.get_pressed()[0]:
+                        self.draw_text_box(spell.description)
+                    self.spell_to_select = spell
 
                     

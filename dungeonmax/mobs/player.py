@@ -4,6 +4,7 @@ import pygame
 from dungeonmax.buffs.resting import Resting
 from dungeonmax.gods.god import God
 from dungeonmax.gods.gods_enum import GodsRepository
+from dungeonmax.inventory import Inventory
 from dungeonmax.mobs.character import Character
 from dungeonmax.settings import FPS
 
@@ -33,6 +34,8 @@ class Player(Character):
         self.resting_deactivate_timer = pygame.time.get_ticks()
         self.resting_cooldown = 5000
 
+        self.inventory = Inventory()
+
         self.coin_xp_gain = 2
 
     def calibrate_stats(self):
@@ -54,10 +57,8 @@ class Player(Character):
         if item.name == 'Coin':
             self.coins += 1
             self.gain_xp(self.coin_xp_gain)
-        elif item.name == 'HealthPotion':
-            self.health = min(self.max_hp, self.health + 10)
         else:
-            print(f"Item collected: {item.name}")
+            self.inventory.add_item(item)
 
     def gain_xp(self, exp_gain):
         self.total_xp += exp_gain
@@ -95,6 +96,7 @@ class Player(Character):
     
     def update(self, player):
         details = super().update(player)
+
         buff = Resting(self)
         if self.resting:
             if buff.name not in self.buffs:

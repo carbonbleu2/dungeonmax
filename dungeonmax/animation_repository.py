@@ -32,7 +32,8 @@ class AnimationRepository:
     ITEM_ANIMS = {
         "Coin": [],
         "HealthPotion": [],
-        "EnergyPotion": []
+        "EnergyPotion": [],
+        "SpellBookOfBlood": []
     }   
 
     PARTICLE_ANIMS = {

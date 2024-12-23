@@ -35,7 +35,7 @@ class Chomper(Character):
         self.health = self.max_hp
         self.energy = self.max_ep
 
-        self.invincibility_cooldown = 500
+        self.invincibility_cooldown = 100
         
         self.speed = 2
 

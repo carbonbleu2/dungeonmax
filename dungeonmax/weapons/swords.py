@@ -70,7 +70,7 @@ class RecruitsSword(Sword):
     DESCRIPTION = "A basic sword to get novice fighters acquainted with the mechanics"
 
     DAMAGE = 5
-    ATTACK_SPEED = 2
+    ATTACK_SPEED = 1.5
     SWING_SPEED = 20
 
     SCALE_FACTOR = 1.2

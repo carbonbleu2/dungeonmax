@@ -6,6 +6,7 @@ from dungeonmax.buffs.haemorrhaging import Haemorrhaging
 from dungeonmax.equipment_manager import EquipmentManager
 from dungeonmax.gods.gods_enum import GodsRepository
 from dungeonmax.gods.trog import Trog
+from dungeonmax.items.spellbooks.spellbook import SpellBook
 from dungeonmax.screenfade import FadeType, ScreenFade
 from dungeonmax.settings import *
 from dungeonmax.skills.blood.haemorrhage import Haemorrhage
@@ -52,8 +53,6 @@ def main():
     equipment_manager.add_weapon(RecruitsSword())
     equipment_manager.add_weapon(RecruitsBow())
 
-    equipment_manager.add_skill(Haemorrhage())
-    equipment_manager.add_skill(Fireball())
     equipment_manager.add_skill(WarriorsResolve())
 
     # weapon = RecruitsBow()
@@ -90,6 +89,9 @@ def main():
 
     ui_show_stats = False
     ui_show_religion_selection = False
+    ui_show_inventory = False
+
+    ui.show_spellbook = False
 
     intro_fade = ScreenFade(FadeType.WHOLE_SCREEN, NamedColour.BLACK.value, 20)
     gameover_fade = ScreenFade(FadeType.CURTAIN_FALL, NamedColour.RED.value, 20)
@@ -270,6 +272,7 @@ def main():
                 temp_health_regen_rate = player.health_regen_rate
                 temp_energy_regen_rate = player.energy_regen_rate
                 temp_buffs = player.buffs
+                temp_inventory = player.inventory
 
                 player = stage.player
                 enemies = stage.npc_list
@@ -294,6 +297,7 @@ def main():
                 player.level = temp_level
                 player.health_regen_rate = temp_health_regen_rate
                 player.energy_regen_rate = temp_energy_regen_rate
+                player.inventory = temp_inventory
                 
                 for buff in temp_buffs:
                     player.buffs[buff] = temp_buffs[buff]
@@ -351,20 +355,49 @@ def main():
                 if event.key == pygame.K_z:
                     ui_show_religion_selection = not ui_show_religion_selection   
                     paused = ui_show_religion_selection
-                if event.key == pygame.K_f and ui.god_to_select:
-                    if current_god is not None and current_god.name != ui.god_to_select:
-                        GodsRepository.GODS[current_god.name].abandon_religion() 
-                    GodsRepository.GODS[ui.god_to_select].join_religion()
-                    paused = False
-                    ui_show_stats = False
-                    ui_show_religion_selection = False
+                if event.key == pygame.K_i:
+                    ui_show_inventory = not ui_show_inventory
+                    paused = ui_show_inventory
+                if event.key == pygame.K_f: 
+                    if ui.god_to_select:
+                        if current_god is not None and current_god.name != ui.god_to_select:
+                            GodsRepository.GODS[current_god.name].abandon_religion() 
+                        GodsRepository.GODS[ui.god_to_select].join_religion()
+                        paused = False
+                        ui_show_stats = False
+                        ui_show_religion_selection = False
+                        ui_show_inventory = False
+                    elif ui.item_to_select:
+                        if isinstance(player.inventory.item_instances[ui.item_to_select], SpellBook):
+                            ui_show_stats = False
+                            ui_show_religion_selection = False
+                            ui_show_inventory = False
+                            ui.show_spellbook = True
+                            ui.chosen_spellbook = player.inventory.item_instances[ui.item_to_select]
+                        else:
+                            player.inventory.use_item(ui.item_to_select, player, enemies, equipment_manager, ui)
+                        paused = False
+                        ui_show_stats = False
+                        ui_show_religion_selection = False
+                        ui_show_inventory = False
+                    if ui.spell_to_select:
+                        equipment_manager.add_skill(ui.spell_to_select)
+                        player.inventory.remove_item(ui.chosen_spellbook, player)
+                        ui.chosen_spellbook = None
+                        paused = False
+                        ui_show_stats = False
+                        ui_show_religion_selection = False
+                        ui_show_inventory = False
+                        ui.show_spellbook = False   
+                        ui.spell_to_select = None                     
                 if event.key == pygame.K_x:
                     if current_god is not None:
                         GodsRepository.GODS[current_god.name].abandon_religion() 
                 if event.key == pygame.K_ESCAPE:
                     paused = False
                     ui_show_stats = False
-                    ui_show_religion_selection = False   
+                    ui_show_religion_selection = False 
+                    ui_show_inventory = False  
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_a:
                     moving_left = False
@@ -383,10 +416,25 @@ def main():
                         particles_group.add(particle)
             
         if ui_show_stats:
+            ui_show_inventory = False
+            ui_show_religion_selection = False
+            ui.show_spellbook = False
             ui.draw_stats(player)
-
-        if ui_show_religion_selection:
+        elif ui_show_religion_selection:
+            ui_show_inventory = False
+            ui_show_stats = False
+            ui.show_spellbook = False
             ui.draw_religion_selection(nearby_gods)
+        elif ui_show_inventory:
+            ui_show_religion_selection = False
+            ui_show_stats = False
+            ui.show_spellbook = False
+            ui.draw_inventory(player.inventory)
+        elif ui.show_spellbook and ui.chosen_spellbook is not None:
+            ui_show_religion_selection = False
+            ui_show_stats = False
+            ui_show_inventory
+            ui.draw_spellbook()
 
         ui.draw_fps(clock.get_fps())
 

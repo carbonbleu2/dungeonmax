@@ -205,4 +205,12 @@ class UI:
         text_instruction_topleft = (rect.left + 10, rect.top + 2)
         text_instruction_rect = text_surface.get_rect(topleft=text_instruction_topleft)
         self.display_surface.blit(text_surface, text_instruction_rect)
+
+    def draw_fps(self, fps):
+        font = pygame.font.Font(UI_FONT, 12)
+        text_fps = font.render(str(int(fps)), False, 'white')
+        text_fps_surface = (self.display_surface.width - 50, self.display_surface.height - 50)
+        text_fps_rect = text_fps.get_rect(center=text_fps_surface)
+        self.display_surface.blit(text_fps, text_fps_rect)
+
                     

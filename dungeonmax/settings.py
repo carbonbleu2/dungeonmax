@@ -14,7 +14,7 @@ SCREEN_HEIGHT = 1000
 
 BG_COLOUR = '#141414'
 
-FPS = 60
+FPS = 70
 
 DAMAGE_TEXT_FONT = pygame.font.Font(
     os.path.join('fonts', 'Minecraftia-Regular.ttf'),
@@ -49,7 +49,7 @@ UI_RELIGION_SELECT_NO_GODS_NEARBY = '''
 There are no god altars nearby
 '''
 
-SCROLL_THRESHOLD = 200
+SCROLL_THRESHOLD = 300
 
 STATS_SCREEN = os.path.join("graphics", "ui", "statscreen.png")
 

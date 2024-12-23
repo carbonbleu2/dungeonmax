@@ -388,6 +388,8 @@ def main():
         if ui_show_religion_selection:
             ui.draw_religion_selection(nearby_gods)
 
+        ui.draw_fps(clock.get_fps())
+
         pygame.display.update()
 
 if __name__ == '__main__':

@@ -9,8 +9,8 @@ TITLE = "DungeonMax v0.0.1alpha"
 
 TILE_SIZE = 32
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1900
+SCREEN_HEIGHT = 1000
 
 BG_COLOUR = '#141414'
 
@@ -51,7 +51,7 @@ There are no god altars nearby
 
 UI_SPELL_SELECT_INSTRUCTION_TEXT = '''
 Choose a spell and press F to learn it.
-Hold left-click to see the spell's details
+Hover over a spell to see it's details
 '''
 
 UI_SPELL_SELECT_NO_SPELLS = '''

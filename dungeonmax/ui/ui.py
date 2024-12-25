@@ -293,8 +293,7 @@ class UI:
 
                 if spell_selection_rect.collidepoint(pygame.mouse.get_pos()):
                     pygame.draw.rect(self.display_surface, 'black', spell_selection_rect, 2)
-                    if pygame.mouse.get_pressed()[0]:
-                        self.draw_text_box(spell.description)
+                    self.draw_message_text(spell.description)
                     self.spell_to_select = spell
 
                     

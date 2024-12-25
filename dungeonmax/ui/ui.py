@@ -235,7 +235,7 @@ class UI:
                     item = inventory.item_instances[item_name]
                     
                     item_surface = item.image
-                    item_rect = item_surface.get_rect(left=rect.left + 10 + 50 * i, top=rect.top + 10 + 50 * j)
+                    item_rect = item_surface.get_rect(left=rect.left + 10 + 40 * j, top=rect.top + 10 + 40 * i)
                     self.display_surface.blit(item_surface, item_rect)
                     
                     border_rect = pygame.Rect(0, 0, 40, 40)

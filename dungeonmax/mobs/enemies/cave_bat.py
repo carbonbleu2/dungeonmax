@@ -21,7 +21,7 @@ class CaveBat(Character):
         self.health = self.max_hp
         self.energy = self.max_ep
 
-        self.invincibility_cooldown = 100
+        self.invincibility_cooldown = 200
         
         self.speed = 2.5
 

@@ -374,9 +374,10 @@ def main():
                             ui_show_inventory = False
                             ui.show_spellbook = True
                             ui.chosen_spellbook = player.inventory.item_instances[ui.item_to_select]
+                            paused = ui.show_spellbook
                         else:
                             player.inventory.use_item(ui.item_to_select, player, enemies, equipment_manager, ui)
-                        paused = False
+                            paused = False
                         ui_show_stats = False
                         ui_show_religion_selection = False
                         ui_show_inventory = False
@@ -389,7 +390,8 @@ def main():
                         ui_show_religion_selection = False
                         ui_show_inventory = False
                         ui.show_spellbook = False   
-                        ui.spell_to_select = None                     
+                        ui.spell_to_select = None
+                        ui.item_to_select = None                     
                 if event.key == pygame.K_x:
                     if current_god is not None:
                         GodsRepository.GODS[current_god.name].abandon_religion() 

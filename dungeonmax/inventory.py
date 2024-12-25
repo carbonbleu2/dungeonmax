@@ -29,7 +29,7 @@ class Inventory:
                 self.items[name] -= 1
             self.update(player)
 
-    def remove_item(self, name, player):
-        if name in self.items:
-            self.items[name] = 0
+    def remove_item(self, item, player):
+        if item.name in self.items:
+            self.items[item.name] = 0
             self.update(player)

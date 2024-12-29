@@ -320,9 +320,6 @@ class UI:
                 self.selecting_skill_from_sidepanel = skill
                 pygame.draw.rect(self.display_surface, 'white', skill_rect, 2)
                 self.draw_message_text(f"{skill.name}: {skill.description}")
-            else:
-                self.selecting_skill_from_sidepanel = None
-
             
 
                     

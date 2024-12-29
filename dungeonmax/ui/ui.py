@@ -18,6 +18,8 @@ class UI:
         self.show_spellbook = False
         self.chosen_spellbook = None
 
+        self.selecting_skill_from_sidepanel = None
+
     def show_bar(self, current_amount, max_amount, bg_rect, colour):
         pygame.draw.rect(self.display_surface, BAR_BG_COLOUR, bg_rect)
         ratio = current_amount / max_amount
@@ -295,5 +297,32 @@ class UI:
                     pygame.draw.rect(self.display_surface, 'black', spell_selection_rect, 2)
                     self.draw_message_text(spell.description)
                     self.spell_to_select = spell
+
+    def draw_skills_sidepanel(self, player, equipment_manager):
+        # Arrange skills in a 10x10 grid on the right side of screen
+        rect_ = pygame.draw.rect(self.display_surface, BG_COLOUR, (self.display_surface.width - 410, 110, 410, 500))
+        text_skills = self.font.render("Skills", False, 'white')
+        text_rect = text_skills.get_rect(centerx=rect_.centerx, y=120)
+        self.display_surface.blit(text_skills, text_rect)
+
+        pygame.draw.rect(self.display_surface, 'white', rect_, 2)
+
+        for skill in equipment_manager.skills:
+            row = equipment_manager.skills.index(skill) // 10
+            col = equipment_manager.skills.index(skill) % 10
+            skill_surface = skill.image
+            skill_rect = skill_surface.get_rect(
+                left=self.display_surface.width - 400 + 40 * col, top=150 + 40 * row)
+            self.display_surface.blit(skill_surface, skill_rect)
+            
+            mouse_pos = pygame.mouse.get_pos()
+            if skill_rect.collidepoint(mouse_pos):
+                self.selecting_skill_from_sidepanel = skill
+                pygame.draw.rect(self.display_surface, 'white', skill_rect, 2)
+                self.draw_message_text(f"{skill.name}: {skill.description}")
+            else:
+                self.selecting_skill_from_sidepanel = None
+
+            
 
                     

@@ -30,7 +30,7 @@ class Bow(Weapon):
         self.angle = math.degrees(math.atan2(y_dist, x_dist))
 
         arrow = None
-        if pygame.mouse.get_pressed()[0] and not self.fired and pygame.time.get_ticks() - self.last_used >= shot_cooldown:
+        if player.left_mouse and not self.fired and pygame.time.get_ticks() - self.last_used >= shot_cooldown:
             trog = GodsRepository.GODS["Trog"]
             if trog.active and not trog.abandoned:
                 GodsRepository.GODS["Trog"].favour -= 1
@@ -41,7 +41,7 @@ class Bow(Weapon):
             self.fired = True
             self.last_used = pygame.time.get_ticks()
             player.deactivate_resting()
-        if not pygame.mouse.get_pressed()[0]:
+        if not player.left_mouse:
             self.fired = False
 
         return arrow

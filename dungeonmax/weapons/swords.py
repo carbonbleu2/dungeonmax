@@ -37,7 +37,7 @@ class Sword(Weapon):
         sword_sprite = None
 
         # Start swinging the sword
-        if pygame.mouse.get_pressed()[0] and not self.swinging and pygame.time.get_ticks() - self.last_used >= shot_cooldown:
+        if player.left_mouse and not self.swinging and pygame.time.get_ticks() - self.last_used >= shot_cooldown:
             sword_sprite = self.particle_class(self.image, self.rect.centerx, self.rect.centery, 
                                                self.angle, self.swing_speed, self.damage + player.melee_attack, self.on_hit)
             self.swinging = True

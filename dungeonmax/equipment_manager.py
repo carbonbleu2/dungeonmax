@@ -66,3 +66,9 @@ class EquipmentManager:
         self.skill_idx -= 1
         if self.skill_idx == -1:
             self.skill_idx = len(self.skills) - 1
+
+    def change_current_skill_to(self, skill):
+        for my_skill in self.skills:
+            if my_skill == skill:
+                self.skill_idx = self.skills.index(skill)
+                return

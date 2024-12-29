@@ -38,6 +38,8 @@ class Player(Character):
 
         self.coin_xp_gain = 2
 
+        self.left_mouse = False
+
     def calibrate_stats(self):
         self.max_hp = int(self.strength * 10)
         self.max_ep = int(self.intelligence * 8)

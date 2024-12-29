@@ -23,6 +23,12 @@ from dungeonmax.button import Button
 class DungeonMax():
     def atoi(self, text):
         return int(text) if text.isdigit() else text
+    
+    def cast_skill(self, skill, player, particles_group):
+        particle = skill.on_cast(player)
+        player.deactivate_resting()
+        if particle:
+            particles_group.add(particle)
 
     def natural_keys(self, text):
         return [self.atoi(c) for c in re.split(r'(\d+)', text) ]
@@ -54,7 +60,9 @@ class DungeonMax():
         equipment_manager.add_weapon(RecruitsSword())
         equipment_manager.add_weapon(RecruitsBow())
 
+        equipment_manager.add_skill(Fireball())
         equipment_manager.add_skill(WarriorsResolve())
+        
 
         # weapon = RecruitsBow()
         particles_group = pygame.sprite.Group()
@@ -226,6 +234,7 @@ class DungeonMax():
             ui.draw_weapon_tooltip(weapon_rect, current_weapon)
             ui.draw_skill_tooltip(skill_rect, current_skill)
             ui.draw_buffs(player)
+            ui.draw_skills_sidepanel(player, equipment_manager)
 
             for god_tile in god_tiles:
                 if self.distance(player.rect, god_tile[1]) <= 2 * TILE_SIZE:
@@ -412,11 +421,16 @@ class DungeonMax():
                         moving_down = False
                 
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        if ui.selecting_skill_from_sidepanel is None:
+                            player.left_mouse = True
+                        else:
+                            equipment_manager.change_current_skill_to(ui.selecting_skill_from_sidepanel)
                     if event.button == 3:
-                        particle = current_skill.on_cast(player)
-                        player.deactivate_resting()
-                        if particle:
-                            particles_group.add(particle)
+                        self.cast_skill(current_skill, player, particles_group)
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    if event.button == 1:
+                        player.left_mouse = False
                 
             if ui_show_stats:
                 ui_show_inventory = False

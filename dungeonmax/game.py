@@ -409,7 +409,10 @@ class DungeonMax():
                         paused = False
                         ui_show_stats = False
                         ui_show_religion_selection = False 
-                        ui_show_inventory = False  
+                        ui_show_inventory = False 
+                        ui.show_spellbook = False 
+                        ui.chosen_spellbook = None
+                        ui.spell_to_select = None
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_a:
                         moving_left = False

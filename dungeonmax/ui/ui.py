@@ -252,8 +252,6 @@ class UI:
                         pygame.draw.rect(self.display_surface, 'black', border_rect, 2)
                         self.draw_message_text(item.description)
                         self.item_to_select = item_name
-                    else:
-                        self.item_to_select = None
                     item_index += 1
 
     def draw_spellbook(self):

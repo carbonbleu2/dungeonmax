@@ -427,10 +427,10 @@ class DungeonMax():
                     if event.button == 1:
                         if ui.selecting_skill_from_sidepanel is None:
                             player.left_mouse = True
-                        if ui.selecting_skill_from_sidepanel == current_skill:
-                            player.left_mouse = True
-                        else:
+                        elif ui.selecting_skill_from_sidepanel != current_skill and ui.hovering_over_skill[ui.selecting_skill_from_sidepanel.name]:
                             equipment_manager.change_current_skill_to(ui.selecting_skill_from_sidepanel)
+                        else:
+                            player.left_mouse = True
                     if event.button == 3:
                         self.cast_skill(current_skill, player, particles_group)
                 elif event.type == pygame.MOUSEBUTTONUP:

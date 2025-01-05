@@ -19,6 +19,7 @@ class UI:
         self.chosen_spellbook = None
 
         self.selecting_skill_from_sidepanel = None
+        self.hovering_over_skill = {}
 
     def show_bar(self, current_amount, max_amount, bg_rect, colour):
         pygame.draw.rect(self.display_surface, BAR_BG_COLOUR, bg_rect)
@@ -316,8 +317,11 @@ class UI:
             mouse_pos = pygame.mouse.get_pos()
             if skill_rect.collidepoint(mouse_pos):
                 self.selecting_skill_from_sidepanel = skill
+                self.hovering_over_skill[skill.name] = True
                 pygame.draw.rect(self.display_surface, 'white', skill_rect, 2)
                 self.draw_message_text(f"{skill.name}: {skill.description}")
+            else:
+                self.hovering_over_skill[skill.name] = False
             
 
                     
